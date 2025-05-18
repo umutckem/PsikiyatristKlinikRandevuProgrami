@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8EEE2567-48E2-4635-9D5A-55B9D5545959}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{6D5F31A8-03FF-49B8-A9D2-4329C2461EB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{33365EAD-2745-4E80-9E2C-802EAB7754A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsikiyatristKlinikRandevuProgrami.Application", "Application\PsikiyatristKlinikRandevuProgrami.Application\PsikiyatristKlinikRandevuProgrami.Application.csproj", "{1BFA22A1-5476-40C3-A6EA-A13CCE2BDAA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsikiyatristKlinikRandevuProgrami.Core", "Core\PsikiyatristKlinikRandevuProgrami.Core\PsikiyatristKlinikRandevuProgrami.Core.csproj", "{784C63FA-A1E9-40A5-9D0B-E81E6E25C51F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsikiyatristKlinikRandevuProgrami.Infrastructure", "Infrastructure\PsikiyatristKlinikRandevuProgrami.Infrastructure\PsikiyatristKlinikRandevuProgrami.Infrastructure.csproj", "{3129561B-194F-42F1-A4F0-0E785D817FEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsikiyatristKlinikRandevuProgram.web", "Presentation\PsikiyatristKlinikRandevuProgram.web\PsikiyatristKlinikRandevuProgram.web.csproj", "{91FFB2BE-C3C7-4393-B4E3-E4CDDA488021}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BFA22A1-5476-40C3-A6EA-A13CCE2BDAA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BFA22A1-5476-40C3-A6EA-A13CCE2BDAA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BFA22A1-5476-40C3-A6EA-A13CCE2BDAA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BFA22A1-5476-40C3-A6EA-A13CCE2BDAA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{784C63FA-A1E9-40A5-9D0B-E81E6E25C51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{784C63FA-A1E9-40A5-9D0B-E81E6E25C51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{784C63FA-A1E9-40A5-9D0B-E81E6E25C51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{784C63FA-A1E9-40A5-9D0B-E81E6E25C51F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3129561B-194F-42F1-A4F0-0E785D817FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3129561B-194F-42F1-A4F0-0E785D817FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3129561B-194F-42F1-A4F0-0E785D817FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3129561B-194F-42F1-A4F0-0E785D817FEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91FFB2BE-C3C7-4393-B4E3-E4CDDA488021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91FFB2BE-C3C7-4393-B4E3-E4CDDA488021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91FFB2BE-C3C7-4393-B4E3-E4CDDA488021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91FFB2BE-C3C7-4393-B4E3-E4CDDA488021}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1BFA22A1-5476-40C3-A6EA-A13CCE2BDAA4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{784C63FA-A1E9-40A5-9D0B-E81E6E25C51F} = {8EEE2567-48E2-4635-9D5A-55B9D5545959}
+		{3129561B-194F-42F1-A4F0-0E785D817FEB} = {6D5F31A8-03FF-49B8-A9D2-4329C2461EB5}
+		{91FFB2BE-C3C7-4393-B4E3-E4CDDA488021} = {33365EAD-2745-4E80-9E2C-802EAB7754A0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {61656E35-9521-4171-84DD-6B41F3CA6BA4}
+	EndGlobalSection
+EndGlobal
