@@ -9,6 +9,6 @@ namespace PsikiyatristKlinikRandevuProgrami.Application.Interfaces
 {
     public interface IKullaniciQueryService
     {
-        List<Kullanici> GetAllKullanicilar();
+        Task<List<Kullanici>> GetAllKullanicilar();
     }
 }

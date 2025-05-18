@@ -21,6 +21,11 @@
         transform: translateY(-5px);
         transition: 0.3s;
     }
+
+    .area-buttons a {
+        margin: 0 10px;
+        min-width: 150px;
+    }
 </style>
 
 <div class="hero text-center">
@@ -67,9 +72,29 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div class="container mt-4">
-        <div class="alert alert-success text-center">
+    <div class="container mt-4 text-center">
+        <div class="alert alert-success">
             Hoş geldiniz, <strong>@User.Identity.Name</strong>!
+        </div>
+
+        <div class="area-buttons d-flex justify-content-center mt-3 flex-wrap">
+            <a class="btn btn-primary" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-shield-lock"></i> Admin Paneli
+            </a>
+            <a class="btn btn-success" asp-area="Hasta" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-person"></i> Hasta Paneli
+            </a>
+            <a class="btn btn-info" asp-area="Doktor" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-heart-pulse"></i> Doktor Paneli
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container mt-4 text-center">
+        <div class="alert alert-warning">
+            Lütfen <a asp-area="" asp-controller="Account" asp-action="Login">giriş yapın</a> veya <a asp-area="" asp-controller="Account" asp-action="Register">kayıt olun</a>.
         </div>
     </div>
 }

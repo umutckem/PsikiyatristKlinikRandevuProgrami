@@ -23,4 +23,13 @@
     <ProjectReference Include="..\..\Infrastructure\PsikiyatristKlinikRandevuProgrami.Infrastructure\PsikiyatristKlinikRandevuProgrami.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Doktor\Data\" />
+    <Folder Include="Areas\Doktor\Models\" />
+    <Folder Include="Areas\Hasta\Data\" />
+    <Folder Include="Areas\Hasta\Models\" />
+  </ItemGroup>
+
 </Project>

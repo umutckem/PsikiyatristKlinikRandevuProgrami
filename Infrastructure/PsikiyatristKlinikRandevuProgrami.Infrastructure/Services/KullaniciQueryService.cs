@@ -1,4 +1,5 @@
-﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
 using System;
@@ -18,9 +19,9 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
             _context = context;
         }
 
-        public List<Kullanici> GetAllKullanicilar()
+        Task<List<Kullanici>> IKullaniciQueryService.GetAllKullanicilar()
         {
-            return _context.kullanicis.ToList();
+            return _context.kullanicis.ToListAsync();
         }
     }
 }

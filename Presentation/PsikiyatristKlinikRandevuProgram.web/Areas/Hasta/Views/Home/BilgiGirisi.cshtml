@@ -1,0 +1,58 @@
+﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici
+
+@{
+    ViewData["Title"] = "Kullanıcı Bilgi Girişi";
+}
+
+<h2>Kullanıcı Bilgi Girişi</h2>
+
+<form asp-area="Hasta" asp-controller="Home" asp-action="BilgiGirisi" method="post">
+    @Html.AntiForgeryToken()
+
+    <div>
+        <label asp-for="@Model.Ad"></label> <span style="color:red">*</span><br />
+        <input asp-for="@Model.Ad" class="form-control" />
+        <span asp-validation-for="Ad" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Soyad"></label> <span style="color:red">*</span><br />
+        <input asp-for="Soyad" class="form-control" />
+        <span asp-validation-for="Soyad" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="DogumTarihi"></label> <span style="color:red">*</span><br />
+        <input asp-for="DogumTarihi" type="date" class="form-control" />
+        <span asp-validation-for="DogumTarihi" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Adres"></label><br />
+        <textarea asp-for="Adres" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Adres" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Cinsiyet"></label><br />
+        <select asp-for="Cinsiyet" class="form-control">
+            <option value="">Seçiniz</option>
+            <option value="Erkek">Erkek</option>
+            <option value="Kadın">Kadın</option>
+            <option value="Diğer">Diğer</option>
+        </select>
+        <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="SigortaDurumu"></label><br />
+        <input asp-for="SigortaDurumu" class="form-control" />
+        <span asp-validation-for="SigortaDurumu" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Kaydet</button>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

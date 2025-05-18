@@ -19,9 +19,9 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
             _queryService = queryService;
         }
 
-        public List<Kullanici> kullanicis()
+        public async Task<List<Kullanici>> kullanicis()
         {
-            return _queryService.GetAllKullanicilar();
+            return await _queryService.GetAllKullanicilar();
         }
 
         public void addKullanici(Kullanici kullanici)

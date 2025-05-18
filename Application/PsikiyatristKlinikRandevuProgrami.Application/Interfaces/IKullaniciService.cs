@@ -9,7 +9,7 @@ namespace PsikiyatristKlinikRandevuProgrami.Application.Interfaces
 {
     public interface IKullaniciService
     {
-        List<Kullanici> kullanicis();
+        Task<List<Kullanici>> kullanicis();
         void addKullanici(Kullanici kullanici);
         void updateKullanici(Kullanici kullanici);
         void deleteKullanici(int kullaniciId);
