@@ -1,58 +1,142 @@
 ﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici
 
-@{
-    ViewData["Title"] = "Kullanıcı Bilgi Girişi";
-}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-<h2>Kullanıcı Bilgi Girişi</h2>
+<style>
+    body {
+        background: #f0f2f5;
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
 
-<form asp-area="Hasta" asp-controller="Home" asp-action="BilgiGirisi" method="post">
-    @Html.AntiForgeryToken()
+    .form-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
 
-    <div>
-        <label asp-for="@Model.Ad"></label> <span style="color:red">*</span><br />
-        <input asp-for="@Model.Ad" class="form-control" />
-        <span asp-validation-for="@Model.Ad" class="text-danger"></span>
-    </div>
+        .form-container h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
 
-    <div>
-        <label asp-for="Soyad"></label> <span style="color:red">*</span><br />
-        <input asp-for="Soyad" class="form-control" />
-        <span asp-validation-for="Soyad" class="text-danger"></span>
-    </div>
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-    <div>
-        <label asp-for="DogumTarihi"></label> <span style="color:red">*</span><br />
-        <input asp-for="DogumTarihi" type="date" class="form-control" />
-        <span asp-validation-for="DogumTarihi" class="text-danger"></span>
-    </div>
+    label {
+        display: block;
+        margin-bottom: 6px;
+        color: #333;
+        font-weight: 500;
+    }
 
-    <div>
-        <label asp-for="Adres"></label><br />
-        <textarea asp-for="Adres" class="form-control" rows="3"></textarea>
-        <span asp-validation-for="Adres" class="text-danger"></span>
-    </div>
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        outline: none;
+        transition: 0.2s border-color ease;
+        font-size: 15px;
+        background-color: #fff;
+    }
 
-    <div>
-        <label asp-for="Cinsiyet"></label><br />
-        <select asp-for="Cinsiyet" class="form-control">
-            <option value="">Seçiniz</option>
-            <option value="Erkek">Erkek</option>
-            <option value="Kadın">Kadın</option>
-            <option value="Diğer">Diğer</option>
-        </select>
-        <span asp-validation-for="Cinsiyet" class="text-danger"></span>
-    </div>
+        input::placeholder,
+        textarea::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
 
-    <div>
-        <label asp-for="SigortaDurumu"></label><br />
-        <input asp-for="SigortaDurumu" class="form-control" />
-        <span asp-validation-for="SigortaDurumu" class="text-danger"></span>
-    </div>
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
 
-    <button type="submit" class="btn btn-primary mt-3">Kaydet</button>
-</form>
+    .text-danger {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 4px;
+        display: block;
+    }
 
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-}
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        background: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .btn-submit:hover {
+            background: #357ab8;
+        }
+</style>
+
+<div class="form-container">
+    <h2>Kullanıcı Bilgi Formu</h2>
+
+    <form asp-action="BilgiGirisi" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label asp-for="Ad"></label>
+            <input asp-for="Ad" name="Ad" type="text" placeholder="Adınızı giriniz" />
+            <span asp-validation-for="Ad" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Soyad"></label>
+            <input asp-for="Soyad" name="Soyad" type="text" placeholder="Soyadınızı giriniz" />
+            <span asp-validation-for="Soyad" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DogumTarihi"></label>
+            <input asp-for="DogumTarihi" name="DogumTarihi" type="date" />
+            <span asp-validation-for="DogumTarihi" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Cinsiyet"></label>
+            <select asp-for="Cinsiyet" name="Cinsiyet">
+                <option value="">Cinsiyet seçiniz</option>
+                <option value="Erkek">Erkek</option>
+                <option value="Kadın">Kadın</option>
+                <option value="Diğer">Diğer</option>
+            </select>
+            <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Adres"></label>
+            <textarea asp-for="Adres" name="Adres" rows="3" placeholder="Adresinizi yazınız"></textarea>
+            <span asp-validation-for="Adres" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SigortaDurumu"></label>
+            <input asp-for="SigortaDurumu" name="SigortaDurumu" type="text" placeholder="Sigorta durumunuzu yazınız ör: SGK,BağKur" />
+            <span asp-validation-for="SigortaDurumu" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-submit">Kaydet</button>
+    </form>
+</div>

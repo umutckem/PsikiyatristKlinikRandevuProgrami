@@ -28,7 +28,8 @@ public class HomeController : Controller
     {
         var identityId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         var kullaniciBilgisi = await _kullaniciQueryService.GetAllKullanicilar();
-        if(kullaniciBilgisi is not null)
+        var kullaniciBilgisiKontrol = kullaniciBilgisi.FirstOrDefault(x => x.IdentityUserId == identityId);
+        if(kullaniciBilgisiKontrol == null)
         {
             return RedirectToAction("BilgiGirisi", "Home", new { area = "Hasta" });
 
@@ -48,15 +49,47 @@ public class HomeController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> BilgiGirisi(Kullanici kullanici)
     {
-        if (!ModelState.IsValid)
+        var identityId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if(identityId != null)
         {
-            // Model geçersiz ise tekrar formu göster
-            return View(kullanici);
+            kullanici.IdentityUserId = identityId;
         }
 
-        // Burada kaydetme işlemi yapabilirsiniz (DbContext kullanarak)
-        // await _context.kullanicis.AddAsync(kullanici);
-        // await _context.SaveChangesAsync();
+        kullanici.Id = Guid.NewGuid(); // Yeni bir GUID oluştur
+
+        // Özel validasyon kuralları
+        if (string.IsNullOrWhiteSpace(kullanici.Ad))
+        {
+            ModelState.AddModelError("Ad", "Ad boş bırakılamaz.");
+        }
+
+        if (string.IsNullOrWhiteSpace(kullanici.Soyad))
+        {
+            ModelState.AddModelError("Soyad", "Soyad boş bırakılamaz.");
+        }
+
+        if (kullanici.DogumTarihi > DateTime.Now)
+        {
+            ModelState.AddModelError("DogumTarihi", "Doğum tarihi gelecekte olamaz.");
+        }
+
+        if (string.IsNullOrEmpty(kullanici.Cinsiyet))
+        {
+            ModelState.AddModelError("Cinsiyet", "Lütfen bir cinsiyet seçiniz.");
+        }
+
+        if (string.IsNullOrWhiteSpace(kullanici.Adres))
+        {
+            ModelState.AddModelError("Adres", "Adres bilgisi gerekli.");
+        }
+
+        if (string.IsNullOrWhiteSpace(kullanici.SigortaDurumu))
+        {
+            ModelState.AddModelError("SigortaDurumu", "Sigorta durumu boş olamaz.");
+        }
+
+        await _kullaniciCommandService.AddKullanici(kullanici);
 
         // Başarılıysa başka sayfaya yönlendir
         return RedirectToAction("Index", "Home", new { area = "Hasta" });
