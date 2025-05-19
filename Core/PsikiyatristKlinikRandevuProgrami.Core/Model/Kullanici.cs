@@ -6,7 +6,7 @@ namespace PsikiyatristKlinikRandevuProgrami.Core.Model
     public class Kullanici
     {
         public Guid Id { get; set; }
-        public string IdentityUserId { get; set; }
+        public string? IdentityUserId { get; set; }
 
         [Required(ErrorMessage = "Ad alanı zorunludur.")]
         [StringLength(50, ErrorMessage = "Ad en fazla 50 karakter olabilir.")]

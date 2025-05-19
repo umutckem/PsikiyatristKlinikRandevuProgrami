@@ -120,7 +120,6 @@
                 <option value="">Cinsiyet seçiniz</option>
                 <option value="Erkek">Erkek</option>
                 <option value="Kadın">Kadın</option>
-                <option value="Diğer">Diğer</option>
             </select>
             <span asp-validation-for="Cinsiyet" class="text-danger"></span>
         </div>
@@ -133,7 +132,11 @@
 
         <div class="form-group">
             <label asp-for="SigortaDurumu"></label>
-            <input asp-for="SigortaDurumu" name="SigortaDurumu" type="text" placeholder="Sigorta durumunuzu yazınız ör: SGK,BağKur" />
+            <select asp-for="SigortaDurumu" name="SigortaDurumu">
+                <option value="">Sigorta durumunuzu seçiniz</option>
+                <option value="Var">Var</option>
+                <option value="Yok">Yok</option>
+            </select>
             <span asp-validation-for="SigortaDurumu" class="text-danger"></span>
         </div>
 

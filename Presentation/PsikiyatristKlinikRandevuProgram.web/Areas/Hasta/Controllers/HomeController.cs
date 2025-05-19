@@ -49,49 +49,77 @@ public class HomeController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> BilgiGirisi(Kullanici kullanici)
     {
-        var identityId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-        if(identityId != null)
-        {
-            kullanici.IdentityUserId = identityId;
-        }
-
-        kullanici.Id = Guid.NewGuid(); // Yeni bir GUID oluştur
-
-        // Özel validasyon kuralları
         if (string.IsNullOrWhiteSpace(kullanici.Ad))
         {
             ModelState.AddModelError("Ad", "Ad boş bırakılamaz.");
+        }
+        else if (kullanici.Ad.Length > 50)
+        {
+            ModelState.AddModelError("Ad", "Ad en fazla 50 karakter olabilir.");
         }
 
         if (string.IsNullOrWhiteSpace(kullanici.Soyad))
         {
             ModelState.AddModelError("Soyad", "Soyad boş bırakılamaz.");
         }
+        else if (kullanici.Soyad.Length > 50)
+        {
+            ModelState.AddModelError("Soyad", "Soyad en fazla 50 karakter olabilir.");
+        }
 
-        if (kullanici.DogumTarihi > DateTime.Now)
+        if (kullanici.DogumTarihi == default)
+        {
+            ModelState.AddModelError("DogumTarihi", "Doğum tarihi zorunludur.");
+        }
+        else if (kullanici.DogumTarihi > DateTime.Now)
         {
             ModelState.AddModelError("DogumTarihi", "Doğum tarihi gelecekte olamaz.");
         }
 
-        if (string.IsNullOrEmpty(kullanici.Cinsiyet))
+        if (string.IsNullOrWhiteSpace(kullanici.Cinsiyet))
         {
             ModelState.AddModelError("Cinsiyet", "Lütfen bir cinsiyet seçiniz.");
+        }
+        else if (kullanici.Cinsiyet.Length > 10)
+        {
+            ModelState.AddModelError("Cinsiyet", "Cinsiyet en fazla 10 karakter olabilir.");
         }
 
         if (string.IsNullOrWhiteSpace(kullanici.Adres))
         {
             ModelState.AddModelError("Adres", "Adres bilgisi gerekli.");
         }
+        else if (kullanici.Adres.Length > 200)
+        {
+            ModelState.AddModelError("Adres", "Adres en fazla 200 karakter olabilir.");
+        }
 
         if (string.IsNullOrWhiteSpace(kullanici.SigortaDurumu))
         {
             ModelState.AddModelError("SigortaDurumu", "Sigorta durumu boş olamaz.");
         }
+        else if (kullanici.SigortaDurumu.Length > 50)
+        {
+            ModelState.AddModelError("SigortaDurumu", "Sigorta durumu en fazla 50 karakter olabilir.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            // breakpoint koy, errors listesini incele
+            return View(kullanici);
+        }
+
+        kullanici.Id = Guid.NewGuid();
+
+        var identityId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (identityId != null)
+        {
+            kullanici.IdentityUserId = identityId;
+        }
 
         await _kullaniciCommandService.AddKullanici(kullanici);
 
-        // Başarılıysa başka sayfaya yönlendir
         return RedirectToAction("Index", "Home", new { area = "Hasta" });
     }
 }
