@@ -1,5 +1,59 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.Randevu
+
 @{
+    ViewData["Title"] = "Randevularım";
+}
+
+<h2>Randevu Oluştur</h2>
+
+<form action="/Hasta/Randevular/RandevuOlustur" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label>Psikiyatrist ID</label>
+        <input type="text" name="PsikiyatristId" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Tarih ve Saat</label>
+        <input type="datetime-local" name="TarihSaat" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Açıklama</label>
+        <textarea name="Aciklama" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Randevu Oluştur</button>
+</form>
+
+<hr />
+
+<h2>Mevcut Randevularım</h2>
+
+@if (ViewBag.Randevular != null && ((List<PsikiyatristKlinikRandevuProgrami.Core.Model.Randevu>)ViewBag.Randevular).Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Durum</th>
+                <th>Açıklama</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in (List<PsikiyatristKlinikRandevuProgrami.Core.Model.Randevu>)ViewBag.Randevular)
+            {
+                <tr>
+                    <td>@item.TarihSaat.ToString("g")</td>
+                    <td>@item.Durum</td>
+                    <td>@item.Aciklama</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Henüz bir randevunuz yok.</p>
 }

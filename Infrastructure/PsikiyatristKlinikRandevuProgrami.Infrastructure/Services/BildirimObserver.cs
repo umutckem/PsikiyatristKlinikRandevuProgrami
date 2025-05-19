@@ -9,24 +9,22 @@ using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
 {
-    public class BildirimLogObserver : IObserver
+    public class BildirimObserver : IObserver
     {
         private readonly ApplicationDbContext _context;
 
-        public BildirimLogObserver(ApplicationDbContext context)
+        public BildirimObserver(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public void Update(string message)
+        public void Update(Bildirim bildirim)
         {
-            var log = new BildirimLog
-            {
-                Mesaj = message,
-                Tarih = DateTime.Now
-            };
+            bildirim.OlusturmaTarihi = DateTime.Now;
+            bildirim.Durum = "Bekliyor";
+            bildirim.GonderimTarihi = null;
 
-            _context.bildirimLogs.Add(log);
+            _context.bildirims.Add(bildirim);
             _context.SaveChanges();
         }
     }

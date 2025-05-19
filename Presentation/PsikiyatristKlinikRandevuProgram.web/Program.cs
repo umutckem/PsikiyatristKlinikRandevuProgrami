@@ -35,6 +35,12 @@ namespace PsikiyatristKlinikRandevuProgram.web
             builder.Services.AddScoped<IBildirimCommandService, BildirimCommandService>();
             builder.Services.AddScoped<IBildirimQueryService, BildirimQueryService>();
 
+
+            builder.Services.AddScoped<ISubject, Subject>();
+            builder.Services.AddScoped<IObserver, BildirimObserver>();
+
+
+
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                 throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 

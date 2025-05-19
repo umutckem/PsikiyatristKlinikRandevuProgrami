@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PsikiyatristKlinikRandevuProgrami.Core.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace PsikiyatristKlinikRandevuProgrami.Application.Interfaces
 {
     public interface ISubject
     {
-        void Attach(IObserver observer);   // Gözlemci ekle
-        void Detach(IObserver observer);   // Gözlemci çıkar
-        void Notify(string message);       // Gözlemcilere bildirim gönder
+        void Attach(IObserver observer);
+        void Detach(IObserver observer);
+        void Notify(Bildirim bildirim);
     }
 }
