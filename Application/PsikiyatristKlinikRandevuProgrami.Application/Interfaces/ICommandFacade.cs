@@ -10,33 +10,33 @@ namespace PsikiyatristKlinikRandevuProgrami.Application.Interfaces
     public interface ICommandFacade
     {
         // Kullanıcı işlemleri
-        void AddKullanici(Kullanici kullanici);
-        void UpdateKullanici(Kullanici kullanici);
+        void AddKullanici(Core.Model.Kullanici kullanici);
+        void UpdateKullanici(Core.Model.Kullanici kullanici);
         void DeleteKullanici(int kullaniciId);
 
         // Ödeme işlemleri
-        void AddOdeme(Odeme odeme);
-        void UpdateOdeme(Odeme odeme);
+        void AddOdeme(Core.Model.Odeme odeme);
+        void UpdateOdeme(Core.Model.Odeme odeme);
         void DeleteOdeme(int odemeId);
 
         // Randevu işlemleri
-        void AddRandevu(Randevu randevu);
-        void UpdateRandevu(Randevu randevu);
+        void AddRandevu(Core.Model.Randevu randevu);
+        void UpdateRandevu(Core.Model.Randevu randevu);
         void DeleteRandevu(int randevuId);
 
         // Klinik rapor işlemleri
-        void AddKlinikRapor(KlinikRapor klinikRapor);
-        void UpdateKlinikRapor(KlinikRapor klinikRapor);
+        void AddKlinikRapor(Core.Model.KlinikRapor klinikRapor);
+        void UpdateKlinikRapor(Core.Model.KlinikRapor klinikRapor);
         void DeleteKlinikRapor(int klinikRaporId);
 
         // Reçete işlemleri
-        void AddRecete(Recete recete);
-        void UpdateRecete(Recete recete);
+        void AddRecete(Core.Model.Recete recete);
+        void UpdateRecete(Core.Model.Recete recete);
         void DeleteRecete(int receteId);
 
         // Geri bildirim işlemleri
-        void AddGeriBildirim(GeriBildirim geriBildirim);
-        void UpdateGeriBildirim(GeriBildirim geriBildirim);
+        void AddGeriBildirim(Core.Model.GeriBildirim geriBildirim);
+        void UpdateGeriBildirim(Core.Model.GeriBildirim geriBildirim);
         void DeleteGeriBildirim(int geriBildirimId);
     }
 }

@@ -9,6 +9,6 @@ namespace PsikiyatristKlinikRandevuProgrami.Application.Interfaces
 {
     public interface IObserver
     {
-        void Update(Bildirim bildirim);
+        void Update(Core.Model.Bildirim bildirim);
     }
 }

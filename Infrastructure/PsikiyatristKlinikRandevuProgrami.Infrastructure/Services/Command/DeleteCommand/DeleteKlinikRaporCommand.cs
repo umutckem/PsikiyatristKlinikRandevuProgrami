@@ -1,0 +1,26 @@
+﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.DeleteCommand
+{
+    public class DeleteKlinikRaporCommand
+    {
+        private readonly IKlinikRaporCommandService _commandService;
+        private readonly int _klinikRaporId;
+
+        public DeleteKlinikRaporCommand(IKlinikRaporCommandService commandService, int klinikRaporId)
+        {
+            _commandService = commandService;
+            _klinikRaporId = klinikRaporId;
+        }
+
+        public void Execute()
+        {
+            _commandService.DeleteKlinikRapor(_klinikRaporId);
+        }
+    }
+}

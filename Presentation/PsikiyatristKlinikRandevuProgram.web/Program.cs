@@ -3,6 +3,17 @@ using Microsoft.EntityFrameworkCore;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Bildirim;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.GeriBildirim;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.KlinikRapor;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Kullanici;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Odeme;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Randevu;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Recete;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PsikiyatristKlinikRandevuProgram.web
 {
@@ -39,6 +50,8 @@ namespace PsikiyatristKlinikRandevuProgram.web
             builder.Services.AddScoped<ISubject, Subject>();
             builder.Services.AddScoped<IObserver, BildirimObserver>();
 
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
 
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
@@ -57,7 +70,7 @@ namespace PsikiyatristKlinikRandevuProgram.web
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddControllersWithViews();
-
+            
             builder.Services.AddRazorPages();
 
             var app = builder.Build();

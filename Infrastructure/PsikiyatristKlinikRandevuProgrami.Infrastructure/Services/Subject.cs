@@ -15,12 +15,14 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
         public void Attach(IObserver observer) => _observers.Add(observer);
         public void Detach(IObserver observer) => _observers.Remove(observer);
 
-        public void Notify(Bildirim bildirim)
+        public void Notify(Core.Model.Bildirim bildirim)
         {
             foreach (var observer in _observers)
             {
                 observer.Update(bildirim);
             }
         }
+
+
     }
 }

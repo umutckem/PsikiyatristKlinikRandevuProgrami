@@ -11,6 +11,6 @@ namespace PsikiyatristKlinikRandevuProgrami.Application.Interfaces
     {
         void Attach(IObserver observer);
         void Detach(IObserver observer);
-        void Notify(Bildirim bildirim);
+        void Notify(Core.Model.Bildirim bildirim);
     }
 }

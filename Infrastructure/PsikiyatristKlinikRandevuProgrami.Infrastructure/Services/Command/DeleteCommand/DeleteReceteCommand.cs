@@ -1,0 +1,26 @@
+﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.DeleteCommand
+{
+    public class DeleteReceteCommand
+    {
+        private readonly IReceteCommandService _commandService;
+        private readonly int _receteId;
+
+        public DeleteReceteCommand(IReceteCommandService commandService, int receteId)
+        {
+            _commandService = commandService;
+            _receteId = receteId;
+        }
+
+        public void Execute()
+        {
+            _commandService.DeleteRecete(_receteId);
+        }
+    }
+}

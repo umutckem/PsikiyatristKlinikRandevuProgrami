@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
 {
+    
     public class BildirimObserver : IObserver
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +20,7 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
             _context = context;
         }
 
-        public void Update(Bildirim bildirim)
+        public void Update(Core.Model.Bildirim bildirim)
         {
             bildirim.OlusturmaTarihi = DateTime.Now;
             bildirim.Durum = "Bekliyor";

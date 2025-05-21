@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services;
 using System;

@@ -17,13 +17,13 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
         }
 
         // Kullanici işlemleri
-        public void AddKullanici(Kullanici kullanici)
+        public void AddKullanici(Core.Model.Kullanici kullanici)
         {
             _context.kullanicis.Add(kullanici);
             _context.SaveChanges();
         }
 
-        public void UpdateKullanici(Kullanici kullanici)
+        public void UpdateKullanici(Core.Model.Kullanici kullanici)
         {
             _context.kullanicis.Update(kullanici);
             _context.SaveChanges();
@@ -40,13 +40,13 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
         }
 
         // Odeme işlemleri
-        public void AddOdeme(Odeme odeme)
+        public void AddOdeme(Core.Model.Odeme odeme)
         {
             _context.odemes.Add(odeme);
             _context.SaveChanges();
         }
 
-        public void UpdateOdeme(Odeme odeme)
+        public void UpdateOdeme(Core.Model.Odeme odeme)
         {
             _context.odemes.Update(odeme);
             _context.SaveChanges();
@@ -63,13 +63,13 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
         }
 
         // Randevu işlemleri
-        public void AddRandevu(Randevu randevu)
+        public void AddRandevu(Core.Model.Randevu randevu)
         {
             _context.randevus.Add(randevu);
             _context.SaveChanges();
         }
 
-        public void UpdateRandevu(Randevu randevu)
+        public void UpdateRandevu(Core.Model.Randevu randevu)
         {
             _context.randevus.Update(randevu);
             _context.SaveChanges();
@@ -86,13 +86,13 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
         }
 
         // Klinik Rapor işlemleri
-        public void AddKlinikRapor(KlinikRapor klinikRapor)
+        public void AddKlinikRapor(Core.Model.KlinikRapor klinikRapor)
         {
             _context.klinikRapors.Add(klinikRapor);
             _context.SaveChanges();
         }
 
-        public void UpdateKlinikRapor(KlinikRapor klinikRapor)
+        public void UpdateKlinikRapor(Core.Model.KlinikRapor klinikRapor)
         {
             _context.klinikRapors.Update(klinikRapor);
             _context.SaveChanges();
@@ -109,13 +109,13 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
         }
 
         // Recete işlemleri
-        public void AddRecete(Recete recete)
+        public void AddRecete(Core.Model.Recete recete)
         {
             _context.recetes.Add(recete);
             _context.SaveChanges();
         }
 
-        public void UpdateRecete(Recete recete)
+        public void UpdateRecete(Core.Model.Recete recete)
         {
             _context.recetes.Update(recete);
             _context.SaveChanges();
@@ -132,13 +132,13 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
         }
 
         // Geri Bildirim işlemleri
-        public void AddGeriBildirim(GeriBildirim geriBildirim)
+        public void AddGeriBildirim(Core.Model.GeriBildirim geriBildirim)
         {
             _context.geriBildirims.Add(geriBildirim);
             _context.SaveChanges();
         }
 
-        public void UpdateGeriBildirim(GeriBildirim geriBildirim)
+        public void UpdateGeriBildirim(Core.Model.GeriBildirim geriBildirim)
         {
             _context.geriBildirims.Update(geriBildirim);
             _context.SaveChanges();

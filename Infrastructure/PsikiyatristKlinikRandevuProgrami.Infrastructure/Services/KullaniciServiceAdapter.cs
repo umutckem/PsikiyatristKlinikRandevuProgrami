@@ -1,4 +1,6 @@
 ﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
 using System;
 using System.Collections.Generic;
@@ -19,17 +21,17 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services
             _queryService = queryService;
         }
 
-        public async Task<List<Kullanici>> kullanicis()
+        public async Task<List<Core.Model.Kullanici>> kullanicis()
         {
             return await _queryService.GetAllKullanicilar();
         }
 
-        public void addKullanici(Kullanici kullanici)
+        public void addKullanici(Core.Model.Kullanici kullanici)
         {
             _commandService.AddKullanici(kullanici);
         }
 
-        public void updateKullanici(Kullanici kullanici)
+        public void updateKullanici(Core.Model.Kullanici kullanici)
         {
             _commandService.UpdateKullanici(kullanici);
         }
