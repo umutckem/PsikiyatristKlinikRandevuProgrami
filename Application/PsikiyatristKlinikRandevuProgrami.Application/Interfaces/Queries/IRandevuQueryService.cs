@@ -10,5 +10,6 @@ namespace PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries
     public interface IRandevuQueryService
     {
         List<Core.Model.Randevu> GetAllRandevular();
+        List<Core.Model.Randevu> GetRandevularByPsikiyatristId(Guid psikiyatristId);
     }
 }

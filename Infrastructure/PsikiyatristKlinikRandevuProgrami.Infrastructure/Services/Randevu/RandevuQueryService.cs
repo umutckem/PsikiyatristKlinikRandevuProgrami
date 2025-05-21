@@ -4,12 +4,9 @@ using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Randevu
 {
-    using PsikiyatristKlinikRandevuProgrami.Core.Model;
     public class RandevuQueryService : IRandevuQueryService
     {
         private readonly ApplicationDbContext _context;
@@ -19,9 +16,16 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Randevu
             _context = context;
         }
 
-        public List<Randevu> GetAllRandevular()
+        public List<Core.Model.Randevu> GetAllRandevular()
         {
             return _context.randevus.ToList();
+        }
+
+        public List<Core.Model.Randevu> GetRandevularByPsikiyatristId(Guid psikiyatristId)
+        {
+            return _context.randevus
+                .Where(r => r.PsikiyatristId == psikiyatristId)
+                .ToList();
         }
     }
 }

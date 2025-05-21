@@ -20,6 +20,7 @@ namespace PsikiyatristKlinikRandevuProgrami.Application.Kullanici.Handlers
         public async Task<List<Core.Model.Kullanici>> Handle(GetAllKullanicilarQuery request, CancellationToken cancellationToken)
         {
             return await _queryService.GetAllKullanicilar();
+
         }
     }
 }

@@ -12,6 +12,7 @@ using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Kullanici;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Odeme;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Randevu;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Recete;
+using PsikiyatristKlinikRandevuProgrami.Application.Randevu.Handlers; // CQRS handler'larýn olduðu namespace
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +24,7 @@ namespace PsikiyatristKlinikRandevuProgram.web
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Application Services
             builder.Services.AddScoped<ICommandFacade, CommandFacade>();
 
             builder.Services.AddScoped<IKullaniciCommandService, KullaniciCommandService>();
@@ -46,14 +48,16 @@ namespace PsikiyatristKlinikRandevuProgram.web
             builder.Services.AddScoped<IBildirimCommandService, BildirimCommandService>();
             builder.Services.AddScoped<IBildirimQueryService, BildirimQueryService>();
 
-
             builder.Services.AddScoped<ISubject, Subject>();
             builder.Services.AddScoped<IObserver, BildirimObserver>();
 
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            
+            builder.Services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(GetRandevularByPsikiyatristIdQueryHandler).Assembly);
+            });
 
-
-
+            // Database
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                 throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -62,19 +66,20 @@ namespace PsikiyatristKlinikRandevuProgram.web
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            // Identity
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = true;
             })
-            .AddRoles<IdentityRole>()  // Rol desteði için mutlaka ekle
+            .AddRoles<IdentityRole>() // Rol desteði
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddControllersWithViews();
-            
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
+            // Middleware
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();

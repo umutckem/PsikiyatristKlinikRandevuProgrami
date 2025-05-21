@@ -1,5 +1,205 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<PsikiyatristKlinikRandevuProgrami.Core.Model.Randevu>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Randevular</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100vh;
+            width: 220px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 1rem;
+            z-index: 1000; /* EKLENDİ */
+        }
+
+            .sidebar a {
+                color: #adb5bd;
+                padding: 0.75rem 1.25rem;
+                display: block;
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+                .sidebar a:hover,
+                .sidebar a.active {
+                    background-color: #495057;
+                    color: white;
+                }
+
+            .sidebar .sidebar-header {
+                color: white;
+                font-size: 1.25rem;
+                font-weight: bold;
+                padding: 0 1.25rem 1rem 1.25rem;
+                border-bottom: 1px solid #495057;
+                margin-bottom: 1rem;
+            }
+
+        /* İçerik alanı sidebar'a göre */
+        .content {
+            margin-left: 220px;
+            padding: 2rem;
+        }
+
+        /* Hoşgeldiniz bölümü */
+        .welcome-message {
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #212529;
+        }
+
+        /* Randevu tablosu */
+        .table {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .table th {
+                background-color: #007bff;
+                color: white;
+                text-align: center;
+            }
+
+            .table td {
+                vertical-align: middle;
+            }
+
+        .back-button {
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            padding: 0.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-align: center;
+            display: inline-block;
+            min-width: 90px;
+        }
+
+        .status-onaylandi {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-beklemede {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .status-iptal {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* Responsive - mobilde sidebar gizle */
+        @@media (max-width: 768px) {
+            .sidebar
+
+        {
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
+
+        .content {
+            margin-left: 0;
+            padding: 1rem;
+        }
+
+        }
+
+        .welcome-message.red-text {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            Klinik Paneli
+        </div>
+        <a href="/Doktor/Randevu/Index"
+           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Randevu"
+                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+            Randevular
+        </a>
+        <a href="/Doktor/Hasta/Index"
+           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Hasta"
+                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+            Hastalar
+        </a>
+        <a href="/Doktor/Notlar/Index"
+           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Notlar"
+                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+            Notlar
+        </a>
+        <a href="/Doktor/Ayarlar/Index"
+           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Ayarlar"
+                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+            Ayarlar
+        </a>
+        <a href="/Doktor/Bildirimler/Index"
+           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Bildirimler"
+                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+            Bildirimler
+        </a>
+    </div>
+
+    <div class="content">
+        <div class="welcome-message red-text">
+            Hoş geldiniz, Dr. @ViewBag.DoktorAdi @ViewBag.DoktorSoyadi!
+        </div>
+
+
+        <a href="javascript:history.back()" class="btn btn-secondary back-button">Geri Dön</a>
+
+        <h2 class="text-center mb-4">Randevular</h2>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Tarih</th>
+                    <th scope="col">Durum</th>
+                    <th scope="col">Açıklama</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.TarihSaat.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <span class="status-badge
+                                @(r.Durum == "Onaylandı" ? "status-onaylandi" :
+                                  r.Durum == "Beklemede" ? "status-beklemede" :
+                                  "status-iptal")">
+                                @r.Durum
+                            </span>
+                        </td>
+                        <td>@r.Aciklama</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
