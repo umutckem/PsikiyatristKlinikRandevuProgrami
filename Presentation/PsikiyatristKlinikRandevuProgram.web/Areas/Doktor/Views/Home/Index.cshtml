@@ -12,7 +12,6 @@
             background-color: #f8f9fa;
         }
 
-        /* Sidebar */
         .sidebar {
             height: 100vh;
             width: 220px;
@@ -21,7 +20,7 @@
             left: 0;
             background-color: #343a40;
             padding-top: 1rem;
-            z-index: 1000; /* EKLENDİ */
+            z-index: 1000;
         }
 
             .sidebar a {
@@ -47,13 +46,11 @@
                 margin-bottom: 1rem;
             }
 
-        /* İçerik alanı sidebar'a göre */
         .content {
             margin-left: 220px;
             padding: 2rem;
         }
 
-        /* Hoşgeldiniz bölümü */
         .welcome-message {
             margin-bottom: 2rem;
             font-size: 1.2rem;
@@ -61,7 +58,6 @@
             color: #212529;
         }
 
-        /* Randevu tablosu */
         .table {
             background-color: white;
             border-radius: 8px;
@@ -77,6 +73,7 @@
 
             .table td {
                 vertical-align: middle;
+                text-align: center;
             }
 
         .back-button {
@@ -107,57 +104,66 @@
             color: white;
         }
 
-        /* Responsive - mobilde sidebar gizle */
         @@media (max-width: 768px) {
-            .sidebar
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
 
-        {
-            position: relative;
-            width: 100%;
-            height: auto;
-        }
-
-        .content {
-            margin-left: 0;
-            padding: 1rem;
-        }
-
+            .content {
+                margin-left: 0;
+                padding: 1rem;
+            }
         }
 
         .welcome-message.red-text {
             color: red;
         }
 
+        .onayla-form {
+            display: inline-block;
+        }
+
+            .onayla-form button {
+                font-size: 0.85rem;
+            }
+
+        .calendar-container {
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+        }
+
+        .calendar-day h5 {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 0.5rem;
+        }
+
+        .calendar-day ul li {
+            font-size: 1rem;
+            padding: 0.25rem 0;
+        }
+
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <div class="sidebar-header">
-            Klinik Paneli
-        </div>
-        <a href="/Doktor/Randevu/Index"
-           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Randevu"
-                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
-            Randevular
+        <div class="sidebar-header">Klinik Paneli</div>
+        <a href="/Doktor/Home/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+            Ana Menu
         </a>
-        <a href="/Doktor/Hasta/Index"
-           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Hasta"
-                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+        <a href="/Doktor/Hasta/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Hasta" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
             Hastalar
         </a>
-        <a href="/Doktor/Notlar/Index"
-           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Notlar"
-                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+        <a href="/Doktor/Notlar/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Notlar" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
             Notlar
         </a>
-        <a href="/Doktor/Ayarlar/Index"
-           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Ayarlar"
-                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+        <a href="/Doktor/Ayarlar/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Ayarlar" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
             Ayarlar
         </a>
-        <a href="/Doktor/Bildirimler/Index"
-           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Bildirimler"
-                && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+        <a href="/Doktor/Bildirimler/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Bildirimler" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
             Bildirimler
         </a>
     </div>
@@ -167,37 +173,110 @@
             Hoş geldiniz, Dr. @ViewBag.DoktorAdi @ViewBag.DoktorSoyadi!
         </div>
 
-
         <a href="javascript:history.back()" class="btn btn-secondary back-button">Geri Dön</a>
 
-        <h2 class="text-center mb-4">Randevular</h2>
+        <ul class="nav nav-tabs" id="randevuTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tablo-tab" data-bs-toggle="tab" data-bs-target="#tablo" type="button" role="tab">Randevu Tablosu</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="takvim-tab" data-bs-toggle="tab" data-bs-target="#takvim" type="button" role="tab">Randevu Takvimi</button>
+            </li>
+        </ul>
 
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Tarih</th>
-                    <th scope="col">Durum</th>
-                    <th scope="col">Açıklama</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var r in Model)
-                {
-                    <tr>
-                        <td>@r.TarihSaat.ToString("dd.MM.yyyy HH:mm")</td>
-                        <td>
-                            <span class="status-badge
-                                @(r.Durum == "Onaylandı" ? "status-onaylandi" :
-                                  r.Durum == "Beklemede" ? "status-beklemede" :
-                                  "status-iptal")">
-                                @r.Durum
-                            </span>
-                        </td>
-                        <td>@r.Aciklama</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="tab-content mt-4" id="randevuTabContent">
+            <!-- Tablo -->
+            <div class="tab-pane fade show active" id="tablo" role="tabpanel">
+                <h2 class="text-center mb-4">Randevular</h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tarih</th>
+                            <th scope="col">Durum</th>
+                            <th scope="col">Açıklama</th>
+                            <th scope="col">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model)
+                        {
+                            <tr>
+                                <td>@r.TarihSaat.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>
+                                    <span class="status-badge
+                                        @(r.Durum == "Onaylandı" ? "status-onaylandi" :
+                                          r.Durum == "Beklemede" ? "status-beklemede" :
+                                          "status-iptal")">
+                                        @r.Durum
+                                    </span>
+                                </td>
+                                <td>@r.Aciklama</td>
+                                <td>
+                                    @if (r.Durum != "Onaylandı")
+                                    {
+                                        <form method="post" action="/Doktor/Home/Onayla" class="onayla-form me-1">
+                                            <input type="hidden" name="id" value="@r.Id" />
+                                            <input type="hidden" name="durum" value="Onaylandı" />
+                                            <button type="submit" class="btn btn-success btn-sm">Onayla</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success me-2">✔</span>
+                                    }
+
+                                    <form method="post" action="/Doktor/Home/BildirimGonder" class="onayla-form me-1">
+                                        <input type="hidden" name="randevuId" value="@r.Id" />
+                                        <button type="submit" class="btn btn-primary btn-sm">Bildirim Gönder</button>
+                                    </form>
+
+                                    <form method="post" action="/Doktor/Home/Sil" class="onayla-form">
+                                        <input type="hidden" name="randevuId" value="@r.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Takvim -->
+            <div class="tab-pane fade" id="takvim" role="tabpanel">
+                <h3 class="text-center mb-4">Randevu Takvimi</h3>
+                <div class="calendar-container">
+                    @if (!Model.Any())
+                    {
+                        <p class="text-center">Henüz randevu yok.</p>
+                    }
+                    else
+                    {
+                        var groupedByDate = Model.OrderBy(r => r.TarihSaat).GroupBy(r => r.TarihSaat.Date);
+
+                        foreach (var group in groupedByDate)
+                        {
+                            <div class="calendar-day mb-4 p-3 border rounded">
+                                <h5>@group.Key.ToString("dd MMMM yyyy")</h5>
+                                <ul class="list-unstyled ms-3">
+                                    @foreach (var randevu in group)
+                                    {
+                                        <li>
+                                            <strong>@randevu.TarihSaat.ToString("HH:mm")</strong> - @randevu.Aciklama
+                                            <span class="badge
+                                                @(randevu.Durum == "Onaylandı" ? "bg-success" :
+                                                  randevu.Durum == "Beklemede" ? "bg-warning text-dark" :
+                                                  "bg-danger") ms-2">
+                                                @randevu.Durum
+                                            </span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

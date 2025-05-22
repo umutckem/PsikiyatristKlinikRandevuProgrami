@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PsikiyatristKlinikRandevuProgrami.Core.Model
 {
-    public class Kullanici
+    public class Kullanici 
     {
         public Guid Id { get; set; }
         public string? IdentityUserId { get; set; }
