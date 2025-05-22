@@ -1,5 +1,81 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<PsikiyatristKlinikRandevuProgrami.Core.Model.KlinikRapor>
+
 @{
+    ViewData["Title"] = "Klinik Raporlarım";
 }
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    .rapor-card {
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .rapor-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        z-index: 10;
+    }
+
+    .rapor-icerik-ozet {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 500;
+    }
+
+    .rapor-icerik-detay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(255,255,255,0.95);
+        padding: 1rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        overflow-y: auto;
+        font-size: 0.95rem;
+        color: #333;
+    }
+
+    .rapor-card:hover .rapor-icerik-detay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+</style>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-primary">🧠 Klinik Raporlarım</h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info text-center shadow-sm">
+            Henüz size ait bir klinik rapor bulunmamaktadır.
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var rapor in Model)
+            {
+                <div class="col">
+                    <div class="card rapor-card rounded-4 shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-secondary">📋 Rapor #@rapor.Id</h5>
+                            <p class="rapor-icerik-ozet">@rapor.RaporIcerigi</p>
+
+                            <div class="rapor-icerik-detay">
+                                <strong>Detaylı İçerik:</strong>
+                                <p>@rapor.RaporIcerigi</p>
+                                <hr />
+                                <small class="text-muted">Oluşturulma Tarihi: @rapor.OlusturmaTarihi.ToString("dd MMM yyyy HH:mm")</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

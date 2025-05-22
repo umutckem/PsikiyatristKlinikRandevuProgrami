@@ -1,58 +1,67 @@
 ﻿@model List<PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici>
 
-@section Styles {
-    <style>
-        .fade-in {
-            animation: fadeIn 0.7s ease-in;
-        }
-
-        @@keyframes fadeIn {
-            from
-
-        {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #f1f5ff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #searchInput {
-            max-width: 300px;
-        }
-    </style>
+@{
+    ViewData["Title"] = "Hastalarım";
 }
 
-<div class="container py-5 fade-in">
-    <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-header bg-primary text-white rounded-top-4 d-flex justify-content-between align-items-center p-4 flex-wrap gap-2">
-            <div>
-                <h3 class="mb-0"><i class="bi bi-people-fill me-2"></i>Hastalar</h3>
-                <small class="text-white-50">Size atanan hastaların listesini buradan görebilirsiniz.</small>
-            </div>
-            <div class="d-flex gap-2 flex-wrap">
-                <input type="text" id="searchInput" class="form-control rounded-pill" placeholder="Hasta ara...">
-                <a href="javascript:history.back()" class="btn btn-outline-light rounded-pill px-4">
-                    <i class="bi bi-arrow-left-circle me-1"></i> Geri Dön
-                </a>
-            </div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        border-radius: 1rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        font-weight: 600;
+    }
+
+    .table thead {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #dbe9ff;
+        cursor: pointer;
+        transition: background-color 0.25s ease;
+    }
+
+    .btn-back {
+        border-radius: 50px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .no-data {
+        font-size: 1.1rem;
+        color: #6c757d;
+        padding: 3rem 0;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="card mx-auto" style="max-width: 900px;">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4><i class="bi bi-people-fill me-2"></i>Hastalarım</h4>
+            <a href="javascript:history.back()" class="btn btn-light btn-back shadow-sm">
+                <i class="bi bi-arrow-left-circle me-1"></i> Geri Dön
+            </a>
         </div>
-        <div class="card-body p-4">
+        <div class="card-body">
             @if (Model != null && Model.Any())
             {
                 <div class="table-responsive">
-                    <table id="hastaTable" class="table table-hover table-striped align-middle text-center">
-                        <thead class="table-dark">
+                    <table class="table table-hover align-middle text-center">
+                        <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Ad Soyad</th>
@@ -80,24 +89,10 @@
             }
             else
             {
-                <div class="alert alert-warning text-center p-4">
+                <div class="text-center no-data">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i> Hiç hasta kaydı bulunamadı.
                 </div>
             }
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        document.getElementById("searchInput").addEventListener("keyup", function () {
-            var input = this.value.toLowerCase();
-            var rows = document.querySelectorAll("#hastaTable tbody tr");
-
-            rows.forEach(function (row) {
-                var text = row.innerText.toLowerCase();
-                row.style.display = text.includes(input) ? "" : "none";
-            });
-        });
-    </script>
-}
