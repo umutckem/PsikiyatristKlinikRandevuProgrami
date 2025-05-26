@@ -1,5 +1,105 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<PsikiyatristKlinikRandevuProgrami.Core.Model.Bildirim>
+@using PsikiyatristKlinikRandevuProgrami.Core.Model
 @{
+    ViewData["Title"] = "Hasta Bildirimleri";
 }
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-bell me-2 text-primary"></i>Hasta Bildirimleri</h2>
+            </div>
+
+            <!-- Hata Mesajı -->
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+                </div>
+            }
+
+            <!-- Bildirim Tablosu -->
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-primary text-center">
+                            <tr>
+                                <th>Tür</th>
+                                <th>İçerik</th>
+                                <th>Gönderim Yöntemi</th>
+                                <th>Durum</th>
+                                <th>Oluşturma Tarihi</th>
+                                <th>Gönderim Tarihi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var bildirim in Model)
+                            {
+                                <tr>
+                                    <td>@bildirim.Tur</td>
+                                    <td>@bildirim.Icerik</td>
+                                    <td>@bildirim.GonderimYontemi</td>
+                                    <td>
+                                        @if (bildirim.Durum == "Başarılı")
+                                        {
+                                            <span class="badge bg-success">Başarılı</span>
+                                        }
+                                        else if (bildirim.Durum == "Bekliyor")
+                                        {
+                                            <span class="badge bg-warning text-dark">Bekliyor</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Hatalı</span>
+                                        }
+                                    </td>
+                                    <td>@bildirim.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>@(bildirim.GonderimTarihi.HasValue ? bildirim.GonderimTarihi.Value.ToString("dd.MM.yyyy HH:mm") : "-")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>Henüz bildirim bulunmamaktadır.
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

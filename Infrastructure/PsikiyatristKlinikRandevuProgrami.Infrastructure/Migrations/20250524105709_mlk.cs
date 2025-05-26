@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class DataBaseV01 : Migration
+    public partial class mlk : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,20 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "bildirimLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Mesaj = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tarih = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_bildirimLogs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,13 +122,13 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdentityUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ad = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Soyad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdentityUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ad = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Soyad = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DogumTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Cinsiyet = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Adres = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SigortaDurumu = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Cinsiyet = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Adres = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    SigortaDurumu = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,7 +161,7 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Migrations
                     HastaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PsikiyatristId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TarihSaat = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Durum = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Durum = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Aciklama = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -335,6 +349,9 @@ namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "bildirimLogs");
 
             migrationBuilder.DropTable(
                 name: "bildirims");
