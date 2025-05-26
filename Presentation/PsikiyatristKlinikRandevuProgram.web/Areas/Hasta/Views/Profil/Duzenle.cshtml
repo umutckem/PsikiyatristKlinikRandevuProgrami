@@ -40,38 +40,38 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Ad" class="form-label fw-bold"><i class="bi bi-person-fill me-2"></i>Ad</label>
-                                <input asp-for="Ad" class="form-control form-control-lg" placeholder="Adınızı giriniz" aria-label="Ad" />
+                                <label asp-for="Ad"  class="form-label fw-bold"><i class="bi bi-person-fill me-2"></i>Ad</label>
+                                <input asp-for="Ad" name="Ad" class="form-control form-control-lg" placeholder="Adınızı giriniz" aria-label="Ad" />
                                 <span asp-validation-for="Ad" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Soyad" class="form-label fw-bold"><i class="bi bi-person-fill me-2"></i>Soyad</label>
-                                <input asp-for="Soyad" class="form-control form-control-lg" placeholder="Soyadınızı giriniz" aria-label="Soyad" />
+                                <input asp-for="Soyad" name="Soyad"  class="form-control form-control-lg" placeholder="Soyadınızı giriniz" aria-label="Soyad" />
                                 <span asp-validation-for="Soyad" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label asp-for="DogumTarihi" class="form-label fw-bold"><i class="bi bi-calendar-date me-2"></i>Doğum Tarihi</label>
-                                <input asp-for="DogumTarihi" type="date" class="form-control form-control-lg" aria-label="Doğum Tarihi" />
+                                <input asp-for="DogumTarihi" name="DogumTarihi" type="date" class="form-control form-control-lg" aria-label="Doğum Tarihi" />
                                 <span asp-validation-for="DogumTarihi" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Cinsiyet" class="form-label fw-bold"><i class="bi bi-gender-ambiguous me-2"></i>Cinsiyet</label>
-                                <select asp-for="Cinsiyet" class="form-control form-control-lg" aria-label="Cinsiyet">
+                                <select asp-for="Cinsiyet" name="Cinsiyet" class="form-control form-control-lg" aria-label="Cinsiyet">
                                     <option value="">Lütfen seçiniz</option>
                                     <option value="Erkek">Erkek</option>
                                     <option value="Kadın">Kadın</option>
                                     <option value="Diğer">Diğer</option>
                                 </select>
-                                <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+                                <span asp-validation-for="Cinsiyet" name="Cinsiyet" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Adres" class="form-label fw-bold"><i class="bi bi-geo-alt-fill me-2"></i>Adres</label>
-                                <textarea asp-for="Adres" class="form-control form-control-lg" rows="4" placeholder="Tam adresinizi giriniz" aria-label="Adres"></textarea>
-                                <span asp-validation-for="Adres" class="text-danger"></span>
+                                <textarea asp-for="Adres" name="Adres" class="form-control form-control-lg" rows="4" placeholder="Tam adresinizi giriniz" aria-label="Adres"></textarea>
+                                <span asp-validation-for="Adres" name="Adres" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label asp-for="SigortaDurumu" class="form-label fw-bold"><i class="bi bi-shield-fill-check me-2"></i>Sigorta Durumu</label>
-                                <input asp-for="SigortaDurumu" class="form-control form-control-lg" placeholder="Ör: SGK, Özel Sigorta" aria-label="Sigorta Durumu" />
+                                <input asp-for="SigortaDurumu" name="SigortaDurumu" class="form-control form-control-lg" placeholder="Ör: SGK, Özel Sigorta" aria-label="Sigorta Durumu" />
                                 <span asp-validation-for="SigortaDurumu" class="text-danger"></span>
                             </div>
                         </div>

@@ -40,15 +40,24 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
         }
 
         [HttpGet]
-        public IActionResult RaporEkle(int randevuId)
+        public async Task<IActionResult> RaporEkle(int randevuId)
         {
-            return View(new KlinikRapor
+            // Örnek: Randevudan hastayı bul
+            var randevu = await _context.randevus.FindAsync(randevuId);
+            if (randevu == null)
+                return NotFound();
+
+            var rapor = new KlinikRapor
             {
+                HastaId = randevu.HastaId,
                 OlusturmaTarihi = DateTime.Now,
-                // bu değerler formda saklanacak
-                Id = randevuId
-            });
+                PsikiyatristId = randevu.PsikiyatristId
+                
+            };
+
+            return View(rapor);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> RaporEkle(KlinikRapor rapor)
@@ -64,6 +73,7 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
 
             return RedirectToAction("Index");
         }
+
 
 
 

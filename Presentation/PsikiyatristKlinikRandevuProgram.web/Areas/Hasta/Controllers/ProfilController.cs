@@ -6,6 +6,8 @@ using PsikiyatristKlinikRandevuProgrami.Core.Model;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
 
 namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
 {
@@ -15,13 +17,15 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
     {
         private readonly IKullaniciQueryService _kullaniciQueryService;
         private readonly IKullaniciCommandService _kullaniciCommandService;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<ProfilController> _logger;
 
-        public ProfilController(IKullaniciQueryService kullaniciQueryService, IKullaniciCommandService kullaniciCommandService, ILogger<ProfilController> logger)
+        public ProfilController(IKullaniciQueryService kullaniciQueryService, IKullaniciCommandService kullaniciCommandService, ILogger<ProfilController> logger,ApplicationDbContext context)
         {
             _kullaniciQueryService = kullaniciQueryService ?? throw new ArgumentNullException(nameof(kullaniciQueryService));
             _kullaniciCommandService = kullaniciCommandService ?? throw new ArgumentNullException(nameof(kullaniciCommandService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _context = context;
         }
 
         [HttpGet]
@@ -117,6 +121,17 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
                 }
 
                 kullanici.IdentityUserId = identityId;
+
+                var kullaniciBilgisi = await _kullaniciQueryService.GetAllKullanicilar();
+                var mevcutKullanici = kullaniciBilgisi.FirstOrDefault(x => x.IdentityUserId == identityId);
+                if (mevcutKullanici != null)
+                {
+                    kullanici.Id = mevcutKullanici.Id;
+
+                    // Çakışmayı önlemek için mevcut entity'yi detach et
+                    _context.Entry(mevcutKullanici).State = EntityState.Detached;
+                }
+
                 await _kullaniciCommandService.UpdateKullanici(kullanici);
 
                 _logger.LogInformation($"Duzenle POST: Kullanıcı güncellendi, Id: {kullanici.Id}");
@@ -130,5 +145,6 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
                 return View(kullanici);
             }
         }
+
     }
 }
