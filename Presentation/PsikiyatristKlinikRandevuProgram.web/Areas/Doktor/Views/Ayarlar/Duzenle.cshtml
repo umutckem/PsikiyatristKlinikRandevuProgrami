@@ -1,0 +1,194 @@
+﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici
+
+@{
+    ViewData["Title"] = "Profil Düzenle";
+    Layout = "~/Areas/Hasta/Views/Profil/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Profil Bilgilerini Düzenle</h4>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Hata ve Başarı Mesajları -->
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+                        </div>
+                    }
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-confetti-fill me-2"></i>
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+                        </div>
+                    }
+
+                    <!-- Form -->
+                    <form asp-area="Doktor" asp-controller="Ayarlar" asp-action="Duzenle" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="IdentityUserId" />
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Ad" class="form-label fw-bold"><i class="bi bi-person-fill me-2"></i>Ad</label>
+                                <input asp-for="Ad" name="Ad" class="form-control form-control-lg" placeholder="Adınızı giriniz" aria-label="Ad" />
+                                <span asp-validation-for="Ad" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Soyad" class="form-label fw-bold"><i class="bi bi-person-fill me-2"></i>Soyad</label>
+                                <input asp-for="Soyad" name="Soyad" class="form-control form-control-lg" placeholder="Soyadınızı giriniz" aria-label="Soyad" />
+                                <span asp-validation-for="Soyad" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DogumTarihi" class="form-label fw-bold"><i class="bi bi-calendar-date me-2"></i>Doğum Tarihi</label>
+                                <input asp-for="DogumTarihi" name="DogumTarihi" type="date" class="form-control form-control-lg" aria-label="Doğum Tarihi" />
+                                <span asp-validation-for="DogumTarihi" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Cinsiyet" class="form-label fw-bold"><i class="bi bi-gender-ambiguous me-2"></i>Cinsiyet</label>
+                                <select asp-for="Cinsiyet" name="Cinsiyet" class="form-control form-control-lg" aria-label="Cinsiyet">
+                                    <option value="">Lütfen seçiniz</option>
+                                    <option value="Erkek">Erkek</option>
+                                    <option value="Kadın">Kadın</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                                <span asp-validation-for="Cinsiyet" name="Cinsiyet" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Adres" class="form-label fw-bold"><i class="bi bi-geo-alt-fill me-2"></i>Adres</label>
+                                <textarea asp-for="Adres" name="Adres" class="form-control form-control-lg" rows="4" placeholder="Tam adresinizi giriniz" aria-label="Adres"></textarea>
+                                <span asp-validation-for="Adres" name="Adres" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SigortaDurumu" class="form-label fw-bold"><i class="bi bi-shield-fill-check me-2"></i>Sigorta Durumu</label>
+                                <input asp-for="SigortaDurumu" name="SigortaDurumu" class="form-control form-control-lg" placeholder="Ör: SGK, Özel Sigorta" aria-label="Sigorta Durumu" />
+                                <span asp-validation-for="SigortaDurumu" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="text-end mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save me-2"></i>Kaydet
+                            </button>
+                            <a href="@Url.Action("Index", "Profil", new { area = "Hasta" })" class="btn btn-outline-secondary btn-lg ms-2">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            // Form validasyonu
+            $("form").validate({
+                rules: {
+                    Ad: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    Soyad: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    DogumTarihi: {
+                        required: true,
+                        date: true
+                    },
+                    Cinsiyet: {
+                        required: true,
+                        maxlength: 10
+                    },
+                    Adres: {
+                        required: true,
+                        maxlength: 200
+                    },
+                    SigortaDurumu: {
+                        required: true,
+                        maxlength: 50
+                    }
+                },
+                messages: {
+                    Ad: {
+                        required: "Ad alanı zorunludur.",
+                        maxlength: "Ad en fazla 50 karakter olabilir."
+                    },
+                    Soyad: {
+                        required: "Soyad alanı zorunludur.",
+                        maxlength: "Soyad en fazla 50 karakter olabilir."
+                    },
+                    DogumTarihi: {
+                        required: "Doğum tarihi zorunludur.",
+                        date: "Geçerli bir tarih giriniz."
+                    },
+                    Cinsiyet: {
+                        required: "Cinsiyet seçimi zorunludur.",
+                        maxlength: "Cinsiyet en fazla 10 karakter olabilir."
+                    },
+                    Adres: {
+                        required: "Adres alanı zorunludur.",
+                        maxlength: "Adres en fazla 200 karakter olabilir."
+                    },
+                    SigortaDurumu: {
+                        required: "Sigorta durumu zorunludur.",
+                        maxlength: "Sigorta durumu en fazla 50 karakter olabilir."
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.next(".text-danger"));
+                },
+                submitHandler: function (form) {
+                    console.log("Form gönderiliyor... Değerler: ", $(form).serialize());
+                    console.log("Form action: ", $(form).attr("action"));
+                    console.log("AntiForgeryToken mevcut mu? ", $("input[name='__RequestVerificationToken']").length > 0 ? "Evet" : "Hayır");
+                    form.submit();
+                }
+            });
+
+            // Form gönderimini izle
+            $("form").on("submit", function (e) {
+                console.log("Form submit olayı tetiklendi.");
+                if (!$(this).valid()) {
+                    console.warn("Form validasyon hatası: ", $(this).find(".text-danger").text());
+                }
+            });
+
+            // İptal butonu tıklamasını logla
+            $("a.btn-outline-secondary").on("click", function (e) {
+                var url = $(this).attr("href");
+                console.log("İptal butonuna tıklandı. Yönlendirme: " + url);
+                console.log("URL geçerli mi? " + (url && url !== "#" ? "Evet" : "Hayır"));
+                if (!url || url === "#") {
+                    console.warn("Hata: Geçersiz veya boş URL. Routing veya yapılandırmayı kontrol edin.");
+                }
+            });
+
+            // Alert'leri 5 saniye sonra otomatik kapat
+            setTimeout(function () {
+                $(".alert").alert("close");
+            }, 5000);
+
+            // Input odaklanma efekti
+            $("input, select, textarea").on("focus", function () {
+                $(this).addClass("border-primary");
+            }).on("blur", function () {
+                $(this).removeClass("border-primary");
+            });
+        });
+    </script>
+}

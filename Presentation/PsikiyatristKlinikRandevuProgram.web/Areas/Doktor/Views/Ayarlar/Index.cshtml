@@ -1,5 +1,151 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici
+
 @{
+    ViewData["Title"] = "Profilim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    <!-- Başlık ve Karşılama Mesajı -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="display-5 fw-bold text-primary">Hoş Geldiniz, @(Model?.Ad ?? "Misafir")!</h1>
+            <p class="lead text-muted">Profil bilgilerinizi aşağıda görüntüleyebilir ve düzenleyebilirsiniz.</p>
+        </div>
+    </div>
+
+    <!-- Hata ve Başarı Mesajları -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+    }
+
+    <!-- Profil Bilgileri -->
+    @if (Model != null)
+    {
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="bi bi-person-circle me-2"></i>Hasta Profili</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-person-fill text-primary me-3 fs-4"></i>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Ad</h6>
+                                        <p class="mb-0 fw-medium">@Model.Ad</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-person-fill text-primary me-3 fs-4"></i>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Soyad</h6>
+                                        <p class="mb-0 fw-medium">@Model.Soyad</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-calendar-date text-primary me-3 fs-4"></i>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Doğum Tarihi</h6>
+                                        <p class="mb-0 fw-medium">@Model.DogumTarihi.ToString("dd MMMM yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-gender-ambiguous text-primary me-3 fs-4"></i>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Cinsiyet</h6>
+                                        <p class="mb-0 fw-medium">@Model.Cinsiyet</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-geo-alt-fill text-primary me-3 fs-4"></i>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Adres</h6>
+                                        <p class="mb-0 fw-medium">@Model.Adres</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-shield-fill-check text-primary me-3 fs-4"></i>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Sigorta Durumu</h6>
+                                        <p class="mb-0 fw-medium">@Model.SigortaDurumu</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end mt-4">
+                            <a href="@Url.Action("Duzenle", "Ayarlar", new { area = "Doktor" })" class="btn btn-primary btn-lg">
+                                <i class="bi bi-pencil-square me-2"></i>Bilgileri Düzenle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-exclamation-circle-fill text-warning fs-1 mb-3"></i>
+                        <h4 class="text-muted">Profil Bilgileri Bulunamadı</h4>
+                        <p class="mb-4">Lütfen profil bilgilerinizi giriniz.</p>
+                        <a asp-area="Hasta" asp-controller="Home" asp-action="BilgiGirisi" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus-fill me-2"></i>Bilgi Girişi Yap
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Buton tıklamasını logla
+            $("a.btn-primary").on("click", function (e) {
+                var url = $(this).attr("href");
+                var buttonText = $(this).text().trim();
+                console.log(`'${buttonText}' butonuna tıklandı. Yönlendirme: ${url}`);
+                console.log(`URL geçerli mi? ${url && url !== "#" ? "Evet" : "Hayır"}`);
+                if (!url || url === "#") {
+                    console.warn("Hata: Geçersiz veya boş URL. Routing veya yapılandırmayı kontrol edin.");
+                }
+            });
+
+            // Alert'leri 5 saniye sonra otomatik kapat
+            setTimeout(function () {
+                $(".alert").alert("close");
+            }, 5000);
+        });
+    </script>
 }
