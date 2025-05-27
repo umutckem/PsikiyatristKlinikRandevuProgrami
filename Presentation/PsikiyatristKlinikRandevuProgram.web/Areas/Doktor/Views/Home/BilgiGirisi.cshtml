@@ -1,0 +1,145 @@
+﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background: #f0f2f5;
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+        .form-container h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        outline: none;
+        transition: 0.2s border-color ease;
+        font-size: 15px;
+        background-color: #fff;
+    }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+    .text-danger {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        background: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .btn-submit:hover {
+            background: #357ab8;
+        }
+</style>
+
+<div class="form-container">
+    <h2>Kullanıcı Bilgi Formu</h2>
+
+    <form asp-action="BilgiGirisi" method="post" asp-area="Doktor">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label asp-for="Ad"></label>
+            <input asp-for="Ad" name="Ad" type="text" placeholder="Adınızı giriniz" />
+            <span asp-validation-for="Ad" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Soyad"></label>
+            <input asp-for="Soyad" name="Soyad" type="text" placeholder="Soyadınızı giriniz" />
+            <span asp-validation-for="Soyad" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DogumTarihi"></label>
+            <input asp-for="DogumTarihi" name="DogumTarihi" type="date" />
+            <span asp-validation-for="DogumTarihi" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Cinsiyet"></label>
+            <select asp-for="Cinsiyet" name="Cinsiyet">
+                <option value="">Cinsiyet seçiniz</option>
+                <option value="Erkek">Erkek</option>
+                <option value="Kadın">Kadın</option>
+            </select>
+            <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Adres"></label>
+            <textarea asp-for="Adres" name="Adres" rows="3" placeholder="Adresinizi yazınız"></textarea>
+            <span asp-validation-for="Adres" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SigortaDurumu"></label>
+            <select asp-for="SigortaDurumu" name="SigortaDurumu">
+                <option value="">Sigorta durumunuzu seçiniz</option>
+                <option value="Var">Var</option>
+                <option value="Yok">Yok</option>
+            </select>
+            <span asp-validation-for="SigortaDurumu" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-submit">Kaydet</button>
+    </form>
+</div>

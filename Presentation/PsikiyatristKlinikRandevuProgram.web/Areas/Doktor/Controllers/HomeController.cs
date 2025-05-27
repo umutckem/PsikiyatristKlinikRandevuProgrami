@@ -46,7 +46,10 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
 
             var Doktorlar = await _kullaniciQueryService.GetAllKullanicilar();
             var DoktorBilgisi = Doktorlar.FirstOrDefault(x => x.IdentityUserId == userIdStr);
-
+            if(DoktorBilgisi == null)
+            {
+                return RedirectToAction("BilgiGirisi", "Home", new { area = "Doktor" });
+            }
             ViewBag.DoktorAdi = DoktorBilgisi.Ad;
             ViewBag.DoktorSoyadi = DoktorBilgisi.Soyad;
 
@@ -107,8 +110,40 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult BilgiGirisi()
+        {
+            return View();
+        }
 
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult BilgiGirisi(Kullanici kullanici)
+        {
+            if (string.IsNullOrWhiteSpace(kullanici.Ad))
+            {
+                ModelState.AddModelError("Ad", "Ad boş bırakılamaz.");
+            }
+            else if (kullanici.Ad.Length > 50)
+            {
+                ModelState.AddModelError("Ad", "Ad en fazla 50 karakter olabilir.");
+            }
+            if (string.IsNullOrWhiteSpace(kullanici.Soyad))
+            {
+                ModelState.AddModelError("Soyad", "Soyad boş bırakılamaz.");
+            }
+            else if (kullanici.Soyad.Length > 50)
+            {
+                ModelState.AddModelError("Soyad", "Soyad en fazla 50 karakter olabilir.");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(kullanici);
+            }
+            kullanici.IdentityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _kullaniciCommandService.AddKullanici(kullanici);
+            return RedirectToAction("Index");
+        }
 
 
 
