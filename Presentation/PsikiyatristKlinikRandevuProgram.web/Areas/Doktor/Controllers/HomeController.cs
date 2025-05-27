@@ -9,8 +9,10 @@ using PsikiyatristKlinikRandevuProgrami.Application.Randevu.Queries;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services;
+using RabbitMQ.Client;
 using System;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
@@ -96,17 +98,37 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             return RedirectToAction("Index");
         }
 
+
         [HttpPost]
         public IActionResult Sil(int randevuId)
         {
-            var randevu = _applicationDbContext.randevus.Find(randevuId);
+            // RabbitMQ bağlantı fabrikası oluştur (localhost veya RabbitMQ sunucu adresi)
+            var factory = new ConnectionFactory() { HostName = "localhost" };
 
-            if (randevu != null)
-            {
-                _applicationDbContext.randevus.Remove(randevu);
-                _applicationDbContext.SaveChanges();
-            }
+            // Bağlantı oluştur
+            using var connection = factory.CreateConnection();
 
+            // Kanal aç
+            using var channel = connection.CreateModel();
+
+            // Kuyruğu tanımla (varsa var olanı kullanır)
+            channel.QueueDeclare(queue: "randevu_iptal_queue",
+                                 durable: false,
+                                 exclusive: false,
+                                 autoDelete: false,
+                                 arguments: null);
+
+            // Mesaj olarak randevuId'yi stringe çevir, sonra byte dizisine
+            var message = randevuId.ToString();
+            var body = Encoding.UTF8.GetBytes(message);
+
+            // Mesajı kuyruğa gönder
+            channel.BasicPublish(exchange: "",
+                                 routingKey: "randevu_iptal_queue",
+                                 basicProperties: null,
+                                 body: body);
+
+            // Silme işlemi burada yapılmaz, mesaj kuyruğa gönderildi.
             return RedirectToAction("Index");
         }
 

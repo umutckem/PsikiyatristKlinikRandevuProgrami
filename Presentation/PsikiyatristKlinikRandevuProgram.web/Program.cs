@@ -51,6 +51,7 @@ namespace PsikiyatristKlinikRandevuProgram.web
             builder.Services.AddScoped<IBildirimQueryService, BildirimQueryService>();
 
             builder.Services.AddScoped<ICommandFacade, CommandFacade>();
+            builder.Services.AddHostedService<RandevuIptalConsumerService>();
 
             builder.Services.AddScoped<ISubject, Subject>();
             builder.Services.AddScoped<IObserver, BildirimObserver>();
