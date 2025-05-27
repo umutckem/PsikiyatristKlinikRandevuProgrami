@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class mlk : Migration
+    public partial class Deneme : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

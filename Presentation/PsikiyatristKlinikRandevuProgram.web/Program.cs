@@ -15,6 +15,8 @@ using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Recete;
 using PsikiyatristKlinikRandevuProgrami.Application.Randevu.Handlers; // CQRS handler'larýn olduðu namespace
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR; // Add for SignalR
+using PsikiyatristKlinikRandevuProgrami.Web.Hubs; // Add for AppointmentHub
 
 namespace PsikiyatristKlinikRandevuProgram.web
 {
@@ -76,6 +78,8 @@ namespace PsikiyatristKlinikRandevuProgram.web
             .AddRoles<IdentityRole>() // Rol desteði
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            builder.Services.AddSignalR();
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
@@ -111,6 +115,7 @@ namespace PsikiyatristKlinikRandevuProgram.web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
+                endpoints.MapHub<AppointmentHub>("/appointmentHub"); // Map SignalR hub
             });
 
             app.Run();

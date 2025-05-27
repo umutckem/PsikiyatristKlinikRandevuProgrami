@@ -12,8 +12,8 @@ using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250524105709_mlk")]
-    partial class mlk
+    [Migration("20250526230252_Deneme")]
+    partial class Deneme
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
