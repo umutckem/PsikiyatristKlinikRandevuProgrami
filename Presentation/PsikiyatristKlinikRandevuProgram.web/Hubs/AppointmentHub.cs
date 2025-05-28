@@ -8,5 +8,14 @@ namespace PsikiyatristKlinikRandevuProgrami.Web.Hubs
         {
             await Clients.User(doctorUserId).SendAsync("ReceiveAppointmentNotification", message);
         }
+
+        public async Task SendApprovalNotification(string hastaUserId, string message)
+        {
+            await Clients.User(hastaUserId).SendAsync("ReceiveApprovalNotification", message);
+        }
+        public async Task SendDeletionNotification(string hastaUserId, string message)
+        {
+            await Clients.User(hastaUserId).SendAsync("ReceiveDeletionNotification", message);
+        }
     }
 }

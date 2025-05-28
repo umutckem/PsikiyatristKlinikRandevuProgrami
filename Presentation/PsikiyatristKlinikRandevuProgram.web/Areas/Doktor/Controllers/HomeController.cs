@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
@@ -9,13 +10,14 @@ using PsikiyatristKlinikRandevuProgrami.Application.Randevu.Queries;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services;
+using PsikiyatristKlinikRandevuProgrami.Web.Hubs;
 using RabbitMQ.Client;
 using System;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
+namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
 {
     [Area("Doktor")]
     [Authorize(Roles = "Doktor")]
@@ -27,8 +29,16 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
         private readonly IRandevuQueryService _randevuQueryService;
         private readonly ICommandFacade _commandFacade;
         private readonly IMediator _mediator;
+        private readonly IHubContext<AppointmentHub> _hubContext;
 
-        public HomeController(IMediator mediator , IKullaniciQueryService kullaniciQueryService , IKullaniciCommandService kullaniciCommandService, ICommandFacade commandFacade, IRandevuQueryService randevuQueryService, ApplicationDbContext applicationDbContext )
+        public HomeController(
+            IMediator mediator,
+            IKullaniciQueryService kullaniciQueryService,
+            IKullaniciCommandService kullaniciCommandService,
+            ICommandFacade commandFacade,
+            IRandevuQueryService randevuQueryService,
+            ApplicationDbContext applicationDbContext,
+            IHubContext<AppointmentHub> hubContext)
         {
             _mediator = mediator;
             _kullaniciQueryService = kullaniciQueryService;
@@ -36,6 +46,7 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             _commandFacade = commandFacade;
             _applicationDbContext = applicationDbContext;
             _randevuQueryService = randevuQueryService;
+            _hubContext = hubContext;
         }
 
         public async Task<IActionResult> Index()
@@ -44,24 +55,21 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             if (!Guid.TryParse(userIdStr, out var psikiyatristId))
                 return Unauthorized();
 
-            
-
             var Doktorlar = await _kullaniciQueryService.GetAllKullanicilar();
             var DoktorBilgisi = Doktorlar.FirstOrDefault(x => x.IdentityUserId == userIdStr);
-            if(DoktorBilgisi == null)
+            if (DoktorBilgisi == null)
             {
                 return RedirectToAction("BilgiGirisi", "Home", new { area = "Doktor" });
             }
             ViewBag.DoktorAdi = DoktorBilgisi.Ad;
             ViewBag.DoktorSoyadi = DoktorBilgisi.Soyad;
 
-
             var randevular = await _mediator.Send(new GetRandevularByPsikiyatristIdQuery(psikiyatristId));
             return View(randevular);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Onayla(int id, string durum) // id artık Guid oldu
+        public async Task<IActionResult> Onayla(int id, string durum)
         {
             var randevu = await _applicationDbContext.randevus.FindAsync(id);
 
@@ -69,6 +77,15 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             {
                 randevu.Durum = durum;
                 await _applicationDbContext.SaveChangesAsync();
+
+                // Send SignalR notification to the patient
+                var hastaUserId = randevu.HastaId.ToString();
+                var doktor = await _applicationDbContext.kullanicis
+                    .FirstOrDefaultAsync(k => k.IdentityUserId == randevu.PsikiyatristId.ToString());
+                var doktorAdi = doktor != null ? $"{doktor.Ad} {doktor.Soyad}" : "Doktor";
+                var message = $"Randevunuz onaylandı: {randevu.TarihSaat:dd.MM.yyyy HH:mm} - Doktor: {doktorAdi} | RandevuId: {randevu.Id}";
+                await _hubContext.Clients.User(hastaUserId)
+                    .SendAsync("ReceiveApprovalNotification", message);
             }
 
             return RedirectToAction("Index");
@@ -81,16 +98,14 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
 
             if (randevu != null)
             {
-                // Bildirim nesnesi oluştur
                 var bildirim = new Bildirim
                 {
                     AliciKullaniciId = randevu.HastaId,
                     Tur = "Randevu",
                     Icerik = $"Sayın hasta, {randevu.TarihSaat:dd.MM.yyyy HH:mm} tarihli randevunuz hakkında bilgilendirme.",
-                    GonderimYontemi = "Sistemİçi" // veya "E-Posta" gibi başka bir değer
+                    GonderimYontemi = "Sistemİçi"
                 };
 
-                // BildirimObserver sınıfını kullanarak bildirimi işle
                 var observer = new BildirimObserver(_applicationDbContext);
                 observer.Update(bildirim);
             }
@@ -98,37 +113,47 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             return RedirectToAction("Index");
         }
 
-
         [HttpPost]
-        public IActionResult Sil(int randevuId)
+        public async Task<IActionResult> Sil(int randevuId)
         {
-            // RabbitMQ bağlantı fabrikası oluştur (localhost veya RabbitMQ sunucu adresi)
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var randevu = await _applicationDbContext.randevus.FindAsync(randevuId);
+            if (randevu != null)
+            {
+                // Get patient ID for SignalR notification
+                var hastaUserId = randevu.HastaId.ToString();
+                var doktor = await _applicationDbContext.kullanicis
+                    .FirstOrDefaultAsync(k => k.IdentityUserId == randevu.PsikiyatristId.ToString());
+                var doktorAdi = doktor != null ? $"{doktor.Ad} {doktor.Soyad}" : "Doktor";
 
-            // Bağlantı oluştur
-            using var connection = factory.CreateConnection();
+                // Delete the appointment
+                _applicationDbContext.randevus.Remove(randevu);
+                await _applicationDbContext.SaveChangesAsync();
 
-            // Kanal aç
-            using var channel = connection.CreateModel();
+                // Send SignalR notification to the patient
+                var message = $"Randevunuz iptal edildi: {randevu.TarihSaat:dd.MM.yyyy HH:mm} - Doktor: {doktorAdi} | RandevuId: {randevuId}";
+                await _hubContext.Clients.User(hastaUserId)
+                    .SendAsync("ReceiveDeletionNotification", message);
 
-            // Kuyruğu tanımla (varsa var olanı kullanır)
-            channel.QueueDeclare(queue: "randevu_iptal_queue",
-                                 durable: false,
-                                 exclusive: false,
-                                 autoDelete: false,
-                                 arguments: null);
+                // Optionally keep RabbitMQ for auditing
+                var factory = new ConnectionFactory() { HostName = "localhost" };
+                using var connection = factory.CreateConnection();
+                using var channel = connection.CreateModel();
 
-            // Mesaj olarak randevuId'yi stringe çevir, sonra byte dizisine
-            var message = randevuId.ToString();
-            var body = Encoding.UTF8.GetBytes(message);
+                channel.QueueDeclare(queue: "randevu_iptal_queue",
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
 
-            // Mesajı kuyruğa gönder
-            channel.BasicPublish(exchange: "",
-                                 routingKey: "randevu_iptal_queue",
-                                 basicProperties: null,
-                                 body: body);
+                var rabbitMessage = randevuId.ToString();
+                var body = Encoding.UTF8.GetBytes(rabbitMessage);
 
-            // Silme işlemi burada yapılmaz, mesaj kuyruğa gönderildi.
+                channel.BasicPublish(exchange: "",
+                                     routingKey: "randevu_iptal_queue",
+                                     basicProperties: null,
+                                     body: body);
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -166,11 +191,5 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             _kullaniciCommandService.AddKullanici(kullanici);
             return RedirectToAction("Index");
         }
-
-
-
-
-
-
     }
 }
