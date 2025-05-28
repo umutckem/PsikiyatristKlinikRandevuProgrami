@@ -76,8 +76,14 @@
                                     }
                                     <td>
                                         <a href="@Url.Action("Details", "Raporlar", new { id = rapor.Id })"
-                                           class="btn btn-outline-primary btn-sm">
+                                           class="btn btn-outline-primary btn-sm me-1">
                                             <i class="fas fa-eye"></i> Detay
+                                        </a>
+
+                                        <a href="@Url.Action("Sil", "Raporlar", new { id = rapor.Id })"
+                                           class="btn btn-outline-danger btn-sm"
+                                           onclick="return confirm('Bu raporu silmek istediğinize emin misiniz?');">
+                                            <i class="fas fa-trash-alt"></i> Sil
                                         </a>
                                     </td>
                                 </tr>
@@ -92,13 +98,13 @@
                     <i class="fas fa-info-circle me-2"></i> Henüz rapor bulunmamaktadır.
                 </div>
             }
+
             <div class="text-center mt-4">
                 <a href="@Url.Action("Index", "Home", new { area = "Doktor" })" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-1"></i> Geri Dön
                 </a>
             </div>
         </div>
-
     </div>
 </div>
 

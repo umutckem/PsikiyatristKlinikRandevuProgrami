@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries;
 using PsikiyatristKlinikRandevuProgrami.Application.KlinikRapor.Queries;
 using PsikiyatristKlinikRandevuProgrami.Application.Kullanici.Queries;
@@ -14,12 +15,14 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
     public class RaporlarController : Controller
     {
         private readonly IKlinikRaporQueryService _klinikRaporQueryService;
+        private readonly IKlinikRaporCommandService _klinikRaporCommandService;
         private readonly IMediator _mediator;
 
-        public RaporlarController(IMediator mediator, IKlinikRaporQueryService klinikRaporQueryService)
+        public RaporlarController(IMediator mediator, IKlinikRaporQueryService klinikRaporQueryService, IKlinikRaporCommandService klinikRaporCommandService)
         {
             _mediator = mediator;
             _klinikRaporQueryService = klinikRaporQueryService;
+            _klinikRaporCommandService = klinikRaporCommandService;
         }
 
         public async Task<IActionResult> Index()
@@ -70,6 +73,24 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
 
             return View(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Sil(int id)
+        {
+            var raporlar = _klinikRaporQueryService.GetAllKlinikRaporlar();
+            var rapor = raporlar.FirstOrDefault(x => x.Id == id);
+
+            if (rapor == null)
+            {
+                TempData["ErrorMessage"] = "Rapor bulunamadı.";
+                return RedirectToAction("Index");
+            }
+
+            _klinikRaporCommandService.DeleteKlinikRapor(id);
+            return RedirectToAction("Index");
+        }
+
+
 
 
     }
