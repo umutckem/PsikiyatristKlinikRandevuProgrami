@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <h2 class="mb-4 text-primary fw-bold">Randevularım</h2>
 
-    <!-- Patient Filter -->
+    <!-- Hasta Filtreleme -->
     <div class="filter-container mb-4">
         <label for="hastaFilter" class="form-label fw-semibold">Hastaya Göre Filtrele:</label>
         <select id="hastaFilter" class="form-select w-50" style="max-width: 300px;" onchange="filterAppointments()">
@@ -54,9 +54,7 @@
                                         <a href="@Url.Action("RaporEkle", "Notlar", new { area = "doktor", randevuId = r.Id })" class="btn btn-primary btn-sm me-2">
                                             <i class="fas fa-file-medical me-1"></i> Rapor Ekle
                                         </a>
-
                                     </td>
-
                                 </tr>
                             }
                         }
@@ -65,14 +63,20 @@
             </div>
         </div>
     </div>
+
+    <!-- Geri Dön Butonu -->
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "Home", new { area = "Doktor" })" class="btn btn-secondary btn-lg px-4">
+            <i class="fas fa-arrow-left me-2"></i> Geri Dön
+        </a>
+    </div>
 </div>
 
 @section Scripts {
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
         function sortTable(n) {
-            let table, rows, switching = true, i, x, y, shouldSwitch, dir = "asc", switchcount = 0;
-            table = document.querySelector("table");
+            let table = document.querySelector("table"), rows, switching = true, i, x, y, shouldSwitch, dir = "asc", switchcount = 0;
             while (switching) {
                 switching = false;
                 rows = table.rows;
@@ -80,23 +84,19 @@
                     shouldSwitch = false;
                     x = rows[i].getElementsByTagName("TD")[n];
                     y = rows[i + 1].getElementsByTagName("TD")[n];
-                    if (dir == "asc") {
-                        if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    } else if (dir == "desc") {
-                        if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
+                    if (dir === "asc" && x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    } else if (dir === "desc" && x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
                     }
                 }
                 if (shouldSwitch) {
                     rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                     switching = true;
                     switchcount++;
-                } else if (switchcount == 0 && dir == "asc") {
+                } else if (switchcount === 0 && dir === "asc") {
                     dir = "desc";
                     switching = true;
                 }
@@ -113,6 +113,7 @@
         }
     </script>
 }
+
 
 <style>
     body {

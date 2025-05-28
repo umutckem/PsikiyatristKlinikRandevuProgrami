@@ -12,15 +12,26 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
     public class BildirimlerController : Controller
     {
         private readonly IMediator _mediator;
+
+        public BildirimlerController(IMediator mediator) 
+        {
+            _mediator = mediator;
+        }
+
         public async Task<IActionResult> Index()
         {
-            var bildirimler = await _mediator.Send(new GetAllBildirimlerQuery());
-
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!Guid.TryParse(userIdStr, out var psikiyatristId))
                 return Unauthorized();
 
-            return View();
+            var bildirimler = await _mediator.Send(new GetAllBildirimlerQuery());
+
+            // Psikiyatriste ait bildirimleri filtrele
+            var doktorBildirimleri = bildirimler
+                .Where(b => b.AliciKullaniciId == psikiyatristId)
+                .ToList();
+
+            return View(doktorBildirimleri); // Bildirim listesini view'e gönder
         }
     }
 }

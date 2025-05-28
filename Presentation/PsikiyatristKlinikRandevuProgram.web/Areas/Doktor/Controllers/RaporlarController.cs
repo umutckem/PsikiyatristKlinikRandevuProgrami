@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries;
 using PsikiyatristKlinikRandevuProgrami.Application.KlinikRapor.Queries;
 using PsikiyatristKlinikRandevuProgrami.Application.Kullanici.Queries;
+using PsikiyatristKlinikRandevuProgrami.Core.Model;
 using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
@@ -11,11 +13,13 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
     [Authorize(Roles = "Doktor")]
     public class RaporlarController : Controller
     {
+        private readonly IKlinikRaporQueryService _klinikRaporQueryService;
         private readonly IMediator _mediator;
 
-        public RaporlarController(IMediator mediator)
+        public RaporlarController(IMediator mediator, IKlinikRaporQueryService klinikRaporQueryService)
         {
             _mediator = mediator;
+            _klinikRaporQueryService = klinikRaporQueryService;
         }
 
         public async Task<IActionResult> Index()
@@ -45,6 +49,26 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
             ViewBag.Randevular = doktorRandevular;
 
             return View("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var raporlar = _klinikRaporQueryService.GetAllKlinikRaporlar();
+            var rapor = raporlar.FirstOrDefault(x => x.Id == id);
+            if (rapor == null)
+                return NotFound();
+
+            var viewModel = new KlinikRapor
+            {
+                Id = rapor.Id,
+                HastaId = rapor.HastaId,
+                PsikiyatristId = rapor.PsikiyatristId,
+                RaporIcerigi = rapor.RaporIcerigi,
+                OlusturmaTarihi = rapor.OlusturmaTarihi
+            };
+
+            return View(viewModel);
         }
 
 

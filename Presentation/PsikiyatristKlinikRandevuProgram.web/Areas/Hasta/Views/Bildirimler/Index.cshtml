@@ -36,6 +36,7 @@
         <div class="card p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2><i class="fas fa-bell me-2 text-primary"></i>Hasta Bildirimleri</h2>
+
             </div>
 
             <!-- Hata Mesajı -->
@@ -59,6 +60,7 @@
                                 <th>Durum</th>
                                 <th>Oluşturma Tarihi</th>
                                 <th>Gönderim Tarihi</th>
+                                <th>İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,10 +86,27 @@
                                     </td>
                                     <td>@bildirim.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</td>
                                     <td>@(bildirim.GonderimTarihi.HasValue ? bildirim.GonderimTarihi.Value.ToString("dd.MM.yyyy HH:mm") : "-")</td>
+                                    <td class="text-center">
+                                        <form action="@Url.Action("Delete", "Bildirimler", new { area = "Hasta" })" method="post"
+                                              onsubmit="return confirm('Bu bildirimi silmek istediğinizden emin misiniz?');">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@bildirim.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash-alt"></i> Sil
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Sayfa Altında Geri Dön Butonu -->
+                <div class="text-center mt-4">
+                    <a href="@Url.Action("Index", "Home", new { area = "Hasta" })" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Geri Dön
+                    </a>
                 </div>
             }
             else
