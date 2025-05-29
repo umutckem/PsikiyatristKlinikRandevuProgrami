@@ -1,0 +1,44 @@
+﻿@model IEnumerable<PsikiyatristKlinikRandevuProgrami.Core.Model.KlinikRapor>
+
+@{
+    ViewData["Title"] = "Klinik Raporlar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Hasta Klinik Raporları</h2>
+
+    <!-- Klinik Rapor Tablosu -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-bordered table-hover table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Oluşturulma Tarihi</th>
+                    <th>Rapor İçeriği</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var rapor in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@rapor.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="text-start">@rapor.RaporIcerigi</td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">Herhangi bir klinik rapor bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

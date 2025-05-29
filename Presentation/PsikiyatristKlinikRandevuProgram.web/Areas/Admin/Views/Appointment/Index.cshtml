@@ -1,0 +1,69 @@
+﻿@model IEnumerable<PsikiyatristKlinikRandevuProgrami.Core.Model.Randevu>
+
+@{
+    ViewData["Title"] = "Randevu Geçmişi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Hasta Randevu Geçmişi</h2>
+
+    <!-- Randevu Tablosu -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Tarih & Saat</th>
+                    <th>Durum</th>
+                    <th>Açıklama</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var randevu in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@randevu.TarihSaat.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(randevu.Durum))
+                                {
+                                    <span class="badge bg-@GetDurumColor(randevu.Durum)">@randevu.Durum</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Bilinmiyor</span>
+                                }
+                            </td>
+                            <td>@randevu.Aciklama</td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Randevu kaydı bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@functions {
+    // Randevu durumuna göre rozet rengi seç
+    private string GetDurumColor(string durum)
+    {
+        return durum.ToLower() switch
+        {
+            "onaylandı" => "success",
+            "iptal" => "danger",
+            "beklemede" => "warning",
+            _ => "secondary"
+        };
+    }
+}

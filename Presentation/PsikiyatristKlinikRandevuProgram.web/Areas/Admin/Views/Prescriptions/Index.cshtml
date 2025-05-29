@@ -1,0 +1,46 @@
+﻿@model IEnumerable<PsikiyatristKlinikRandevuProgrami.Core.Model.Recete>
+
+@{
+    ViewData["Title"] = "Reçete Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Hasta Reçete Geçmişi</h2>
+
+    <!-- Reçete Tablosu -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Yazılma Tarihi</th>
+                    <th>İlaç Bilgileri</th>
+                    <th>Tedavi Planı</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var recete in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@recete.YazilmaTarihi.ToString("dd.MM.yyyy")</td>
+                            <td>@recete.IlacBilgileri</td>
+                            <td>@recete.TedaviPlani</td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Herhangi bir reçete kaydı bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+﻿@model List<PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici>
+
+@{
+    ViewData["Title"] = "Kullanıcı Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var roller = ViewBag.KullaniciRolleri as Dictionary<string, List<string>>;
+}
+
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Kullanıcı Listesi</h2>
+
+    <!-- 🔍 Arama Kutusu -->
+    <div class="row mb-3">
+        <div class="col-md-4 offset-md-8">
+            <input type="text" id="searchInput" class="form-control" placeholder="Ad veya Soyad ile ara...">
+        </div>
+    </div>
+
+    <!-- 📋 Kullanıcı Tablosu -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered text-center align-middle shadow-sm" id="userTable">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>Doğum Tarihi</th>
+                    <th>Cinsiyet</th>
+                    <th>Sigorta Durumu</th>
+                    <th>Adres</th>
+                    <th>Roller</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var kullanici in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@kullanici.Ad</td>
+                            <td>@kullanici.Soyad</td>
+                            <td>@kullanici.DogumTarihi.ToString("dd.MM.yyyy")</td>
+                            <td>@kullanici.Cinsiyet</td>
+                            <td>@kullanici.SigortaDurumu</td>
+                            <td>@kullanici.Adres</td>
+                            <td>
+                                @if (roller != null && !string.IsNullOrEmpty(kullanici.IdentityUserId) && roller.ContainsKey(kullanici.IdentityUserId))
+                                {
+                                    foreach (var rol in roller[kullanici.IdentityUserId])
+                                    {
+                                        <span class="badge bg-secondary me-1">@rol</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Tanımsız</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex flex-wrap gap-1 justify-content-center">
+                                    <a href="/Admin/User/ChangeRole/@kullanici.IdentityUserId" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fa-solid fa-user-gear me-1"></i> Rol Değiştir
+                                    </a>
+                                    <a href="/Admin/Payments/Index/@kullanici.IdentityUserId" class="btn btn-outline-success btn-sm">
+                                        <i class="fa-solid fa-money-bill-wave me-1"></i> Ödemeler
+                                    </a>
+                                    <a href="/Admin/Prescriptions/Index/@kullanici.IdentityUserId" class="btn btn-outline-primary btn-sm">
+                                        <i class="fa-solid fa-prescription-bottle-medical me-1"></i> Reçeteler
+                                    </a>
+                                    <a href="/Admin/Appointment/Index/@kullanici.IdentityUserId" class="btn btn-outline-warning btn-sm">
+                                        <i class="fa-solid fa-calendar-check me-1"></i> Randevular
+                                    </a>
+                                    <a href="/Admin/ClinicReports/Index/@kullanici.IdentityUserId" class="btn btn-outline-danger btn-sm">
+                                        <i class="fa-solid fa-file-medical me-1"></i> Klinik Raporları
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">Hiç kullanıcı bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // 🔍 Arama kutusu ile filtreleme
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll("#userTable tbody tr");
+
+            rows.forEach(row => {
+                const ad = row.cells[1].textContent.toLowerCase();
+                const soyad = row.cells[2].textContent.toLowerCase();
+                const match = ad.includes(filter) || soyad.includes(filter);
+                row.style.display = match ? "" : "none";
+            });
+        });
+    </script>
+}

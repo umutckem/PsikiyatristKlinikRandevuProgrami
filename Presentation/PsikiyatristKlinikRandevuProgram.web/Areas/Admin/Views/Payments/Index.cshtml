@@ -1,0 +1,48 @@
+﻿@model IEnumerable<PsikiyatristKlinikRandevuProgrami.Core.Model.Odeme>
+
+@{
+    ViewData["Title"] = "Ödeme Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Hasta Ödeme Geçmişi</h2>
+
+    <!-- Ödeme Tablosu -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Ödeme Tarihi</th>
+                    <th>Tutar (₺)</th>
+                    <th>Yöntem</th>
+                    <th>Açıklama</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var odeme in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@odeme.OdemeTarihi.ToString("dd.MM.yyyy")</td>
+                            <td>@odeme.Ucret.ToString("N2")</td>
+                            <td>@odeme.OdemeYontemi</td>
+                            <td>@odeme.Aciklama</td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Herhangi bir ödeme kaydı bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

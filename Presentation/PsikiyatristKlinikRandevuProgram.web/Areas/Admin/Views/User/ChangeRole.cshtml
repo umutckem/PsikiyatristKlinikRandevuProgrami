@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Rol Değiştir";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var kullanici = ViewBag.Kullanici as PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici;
+    var aktifRol = ViewBag.AktifRol as string;
+    var roller = ViewBag.TumRoller as List<string>;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Rol Değiştir</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="ChangeRole" method="post">
+                        <input type="hidden" name="identityUserId" value="@kullanici.IdentityUserId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Ad Soyad:</label>
+                            <input type="text" class="form-control" value="@($"{kullanici.Ad} {kullanici.Soyad}")" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şu Anki Rol:</label>
+                            <input type="text" class="form-control" value="@aktifRol" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Yeni Rol Seçin:</label>
+                            <select class="form-select" name="yeniRol" required>
+                                <option selected disabled>Rol Seçin</option>
+                                @foreach (var rol in roller)
+                                {
+                                    <option value="@rol">@rol</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="text-end">
+                            <a href="/Admin/User" class="btn btn-outline-secondary">Geri Dön</a>
+                            <button type="submit" class="btn btn-success">Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
