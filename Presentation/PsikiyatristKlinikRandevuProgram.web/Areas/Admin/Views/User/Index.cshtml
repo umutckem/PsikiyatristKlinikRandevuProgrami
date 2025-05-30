@@ -77,6 +77,9 @@
                                     <a href="/Admin/ClinicReports/Index/@kullanici.IdentityUserId" class="btn btn-outline-danger btn-sm">
                                         <i class="fa-solid fa-file-medical me-1"></i> Klinik Raporları
                                     </a>
+                                    <a href="javascript:void(0);" onclick="confirmDelete('@kullanici.IdentityUserId')" class="btn btn-outline-danger btn-sm">
+                                        <i class="fa-solid fa-trash me-1"></i> Sil
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -108,5 +111,12 @@
                 row.style.display = match ? "" : "none";
             });
         });
+
+        // ❗ Kullanıcı silme onayı
+        function confirmDelete(userId) {
+            if (confirm("Bu kullanıcıyı silmek istediğinizden emin misiniz?")) {
+                window.location.href = `/Admin/User/DeleteUser/${userId}`;
+            }
+        }
     </script>
 }

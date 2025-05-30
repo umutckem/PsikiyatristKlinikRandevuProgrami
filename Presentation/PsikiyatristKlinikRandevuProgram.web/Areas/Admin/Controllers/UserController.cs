@@ -117,5 +117,26 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
             TempData["Message"] = "Rol başarıyla güncellendi.";
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public IActionResult DeleteUser(Guid id)
+        {
+            // IdentityUserId string olduğu için Guid'i ToString ile karşılaştır
+            var kullanici = _applicationDbContext.kullanicis.FirstOrDefault(x => x.IdentityUserId == id.ToString());
+            var identityUser = _applicationDbContext.Users.FirstOrDefault(x => x.Id == id.ToString());
+
+            if (kullanici != null)
+                _applicationDbContext.kullanicis.Remove(kullanici);
+
+            if (identityUser != null)
+                _applicationDbContext.Users.Remove(identityUser);
+
+            // Değişiklikleri tek seferde kaydet
+            _applicationDbContext.SaveChanges();
+
+            TempData["Message"] = "Kullanıcı başarıyla silindi.";
+            return RedirectToAction("Index");
+        }
+
     }
 }
