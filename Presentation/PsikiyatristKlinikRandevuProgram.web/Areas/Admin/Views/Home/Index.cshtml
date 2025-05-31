@@ -3,60 +3,55 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container py-5">
-    <h2 class="mb-4 text-center fw-bold">Yönetici Paneli</h2>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<div class="container mx-auto px-4 py-8 bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+    <!-- Başlık -->
+    <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-10 tracking-tight">Yönetici Paneli</h2>
 
     <!-- İstatistik Kartları -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-3">
-            <div class="card text-white bg-primary shadow h-100 text-center p-3 hover-shadow">
-                <div class="card-body">
-                    <i class="fa-solid fa-users fa-2x mb-2"></i>
-                    <h5 class="card-title">Toplam Kullanıcı</h5>
-                    <h3 class="fw-bold">@ViewBag.ToplamKullanici</h3>
-                </div>
-            </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl shadow-lg p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+            <i class="fa-solid fa-users text-5xl text-blue-600 mb-4"></i>
+            <h5 class="text-xl font-semibold text-gray-800">Toplam Kullanıcı</h5>
+            <h3 class="text-3xl font-bold text-gray-900">@ViewBag.ToplamKullanici</h3>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-success shadow h-100 text-center p-3 hover-shadow">
-                <div class="card-body">
-                    <i class="fa-solid fa-user-doctor fa-2x mb-2"></i>
-                    <h5 class="card-title">Doktor Sayısı</h5>
-                    <h3 class="fw-bold">@ViewBag.DoktorSayisi</h3>
-                </div>
-            </div>
+        <div class="bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-lg p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+            <i class="fa-solid fa-user-doctor text-5xl text-green-600 mb-4"></i>
+            <h5 class="text-xl font-semibold text-gray-800">Doktor Sayısı</h5>
+            <h3 class="text-3xl font-bold text-gray-900">@ViewBag.DoktorSayisi</h3>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-info shadow h-100 text-center p-3 hover-shadow">
-                <div class="card-body">
-                    <i class="fa-solid fa-user-injured fa-2x mb-2"></i>
-                    <h5 class="card-title">Hasta Sayısı</h5>
-                    <h3 class="fw-bold">@ViewBag.HastaSayisi</h3>
-                </div>
-            </div>
+        <div class="bg-gradient-to-br from-teal-100 to-teal-200 rounded-xl shadow-lg p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+            <i class="fa-solid fa-user-injured text-5xl text-teal-600 mb-4"></i>
+            <h5 class="text-xl font-semibold text-gray-800">Hasta Sayısı</h5>
+            <h3 class="text-3xl font-bold text-gray-900">@ViewBag.HastaSayisi</h3>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-warning shadow h-100 text-center p-3 hover-shadow">
-                <div class="card-body">
-                    <i class="fa-solid fa-calendar-check fa-2x mb-2"></i>
-                    <h5 class="card-title">Randevu Sayısı</h5>
-                    <h3 class="fw-bold">@ViewBag.RandevuSayisi</h3>
-                </div>
-            </div>
+        <div class="bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl shadow-lg p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+            <i class="fa-solid fa-calendar-check text-5xl text-purple-600 mb-4"></i>
+            <h5 class="text-xl font-semibold text-gray-800">Randevu Sayısı</h5>
+            <h3 class="text-3xl font-bold text-gray-900">@ViewBag.RandevuSayisi</h3>
         </div>
     </div>
 
-    <!-- Navigasyon Butonları (Ortalanmış ve eşit genişlikte) -->
-    <div class="row justify-content-center text-center mt-4">
-        <div class="col-md-6 col-lg-4 mb-3">
-            <a href="/Admin/User" class="btn btn-outline-dark btn-lg w-100 py-3">
-                <i class="fa-solid fa-users me-2"></i> Kullanıcılar
-            </a>
-        </div>
-        <div class="col-md-6 col-lg-4 mb-3">
-            <a href="/Admin/OtherActions" class="btn btn-outline-info btn-lg w-100 py-3">
-                <i class="fa-solid fa-gears me-2"></i> Diğer İşlemler
-            </a>
-        </div>
+    <!-- Navigasyon Butonları -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <a href="/Admin/User" class="bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-md hover:bg-blue-700 transition duration-300 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-users mr-3 text-xl"></i> Kullanıcılar
+        </a>
+        <a href="/Admin/OtherActions" class="bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-md hover:bg-blue-700 transition duration-300 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-gears mr-3 text-xl"></i> Diğer İşlemler
+        </a>
     </div>
 </div>
+
+<style>
+    /* Özelleştirilmiş Hover Efektleri */
+    .hover\:shadow-2xl:hover {
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    /* Gradient Arka Plan için İnce Ayar */
+    .bg-gradient-to-br {
+        background: linear-gradient(135deg, var(--tw-gradient-stops));
+    }
+</style>

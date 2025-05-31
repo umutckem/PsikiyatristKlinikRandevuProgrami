@@ -1,4 +1,6 @@
-﻿@{
+﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici
+
+@{
     ViewData["Title"] = "Rol Değiştir";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -8,40 +10,56 @@
 }
 
 <div class="container py-5">
+    <!-- Başlık -->
+    <h2 class="fw-bold text-center mb-4" style="color: #00a8e8;">Rol Değiştirme</h2>
+
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Rol Değiştir</h5>
+        <div class="col-md-8 col-lg-6">
+            <!-- Kart -->
+            <div class="card shadow-lg border-0 animate__animated animate__fadeInUp role-change-card">
+                <div class="card-header text-white d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0"><i class="bi bi-person-gear me-2"></i>Rol Değiştir</h5>
+                    <span class="badge bg-dark bg-opacity-75 text-white">@($"{kullanici.Ad} {kullanici.Soyad}")</span>
                 </div>
-                <div class="card-body">
-                    <form asp-action="ChangeRole" method="post">
+                <div class="card-body p-4">
+                    <form asp-action="ChangeRole" method="post" class="needs-validation" novalidate>
                         <input type="hidden" name="identityUserId" value="@kullanici.IdentityUserId" />
 
-                        <div class="mb-3">
-                            <label class="form-label">Ad Soyad:</label>
-                            <input type="text" class="form-control" value="@($"{kullanici.Ad} {kullanici.Soyad}")" disabled />
+                        <!-- Ad Soyad -->
+                        <div class="form-floating mb-4">
+                            <input type="text" id="adSoyad" class="form-control" value="@($"{kullanici.Ad} {kullanici.Soyad}")" disabled placeholder="Ad Soyad" />
+                            <label for="adSoyad"><i class="bi bi-person me-2"></i>Ad Soyad</label>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Şu Anki Rol:</label>
-                            <input type="text" class="form-control" value="@aktifRol" disabled />
+                        <!-- Şu Anki Rol -->
+                        <div class="form-floating mb-4">
+                            <input type="text" id="aktifRol" class="form-control" value="@aktifRol" disabled placeholder="Şu Anki Rol" />
+                            <label for="aktifRol"><i class="bi bi-person-vcard me-2"></i>Şu Anki Rol</label>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Yeni Rol Seçin:</label>
-                            <select class="form-select" name="yeniRol" required>
-                                <option selected disabled>Rol Seçin</option>
+                        <!-- Yeni Rol Seçimi -->
+                        <div class="form-floating mb-4">
+                            <select id="yeniRol" class="form-select" name="yeniRol" required>
+                                <option selected disabled value="">Rol Seçin</option>
                                 @foreach (var rol in roller)
                                 {
                                     <option value="@rol">@rol</option>
                                 }
                             </select>
+                            <label for="yeniRol"><i class="bi bi-list-check me-2"></i>Yeni Rol Seçin</label>
+                            <div class="invalid-feedback">
+                                Lütfen bir rol seçin.
+                            </div>
                         </div>
 
-                        <div class="text-end">
-                            <a href="/Admin/User" class="btn btn-outline-secondary">Geri Dön</a>
-                            <button type="submit" class="btn btn-success">Kaydet</button>
+                        <!-- Butonlar -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="/Admin/User" class="btn btn-outline-secondary btn-animate" data-bs-toggle="tooltip" title="Kullanıcı listesine geri dön">
+                                <i class="bi bi-arrow-left-short me-1"></i> Geri Dön
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-animate" data-bs-toggle="tooltip" title="Seçilen rolü kaydet">
+                                <i class="bi bi-save me-1"></i> Kaydet
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -49,3 +67,188 @@
         </div>
     </div>
 </div>
+
+@section Styles {
+    <style type="text/css">
+        /* Genel stil */
+        :root {
+            --primary: #00a8e8;
+            --secondary: #6c757d;
+            --background: #ffffff;
+            --text: #343a40;
+            --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Karanlık mod */
+        [data-theme="dark"] {
+            --primary: #4cc9f0;
+            --secondary: #adb5bd;
+            --background: #212529;
+            --text: #e9ecef;
+            --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Kart tasarımı */
+        .role-change-card {
+            border-radius: 16px;
+            background: var(--background);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .role-change-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+            }
+
+        .card-header {
+            background: var(--primary);
+            border-radius: 16px 16px 0 0;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Form elemanları */
+        .form-floating > .form-control,
+        .form-floating > .form-select {
+            height: calc(3.5rem + 2px);
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+
+            .form-floating > .form-control:focus,
+            .form-floating > .form-select:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0.25rem rgba(0, 168, 232, 0.25);
+            }
+
+        .form-floating > label {
+            color: #6c757d;
+            font-size: 0.95rem;
+            padding-left: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-floating > .form-control:not(:placeholder-shown) ~ label,
+        .form-floating > .form-select:not(:empty) ~ label {
+            transform: scale(0.85) translateY(-1rem) translateX(0.15rem);
+            color: var(--primary);
+        }
+
+        /* Butonlar */
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .btn-animate::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                transition: width 0.6s ease, height 0.6s ease;
+            }
+
+            .btn-animate:hover::after {
+                width: 200px;
+                height: 200px;
+            }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+            .btn-primary:hover {
+                background-color: #007ea7;
+                border-color: #007ea7;
+            }
+
+        .btn-outline-secondary {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+            .btn-outline-secondary:hover {
+                background-color: var(--secondary);
+                color: white;
+            }
+
+        /* Animasyonlar */
+        .animate__animated.animate__fadeInUp {
+            --animate-duration: 0.6s;
+        }
+
+        /* Mobil uyumluluk */
+        @@media screen and (max-width: 768px) {
+            .role-change-card {
+                margin: 0 0.6rem;
+            }
+
+            .card-header {
+                padding: 1rem;
+            }
+
+            .btn {
+                font-size: 0.85rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .form-floating > label {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Form validasyonu
+        (function() {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!form.checkValidity()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                    form.classList.add('has-validated');
+                }, false);
+            });
+        })();
+
+        // Tooltip başlatıcı
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        });
+
+        // Karanlık mod geçişi
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Tema yükleme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+}

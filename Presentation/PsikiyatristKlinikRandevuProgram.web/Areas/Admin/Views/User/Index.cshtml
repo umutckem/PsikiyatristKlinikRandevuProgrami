@@ -8,111 +8,250 @@
 }
 
 <div class="container py-5">
-    <h2 class="mb-4 text-center fw-bold">Kullanıcı Listesi</h2>
+    <!-- Başlık -->
+    <div class="mb-4">
+        <h2 class="fw-bold text-primary text-center">Kullanıcı Listesi</h2>
+    </div>
 
-    <!-- 🔍 Arama Kutusu -->
-    <div class="row mb-3">
-        <div class="col-md-4 offset-md-8">
-            <input type="text" id="searchInput" class="form-control" placeholder="Ad veya Soyad ile ara...">
+    <!-- Arama ve Filtreleme -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Ad veya Soyad ile ara...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select id="roleFilter" class="form-select">
+                        <option value="">Tüm Roller</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Doktor">Doktor</option>
+                        <option value="Hasta">Hasta</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="statusFilter" class="form-select">
+                        <option value="">Tüm Sigorta Durumları</option>
+                        <option value="Var">Sigorta Var</option>
+                        <option value="Yok">Sigorta Yok</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- 📋 Kullanıcı Tablosu -->
-    <div class="table-responsive">
-        <table class="table table-striped table-hover table-bordered text-center align-middle shadow-sm" id="userTable">
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Ad</th>
-                    <th>Soyad</th>
-                    <th>Doğum Tarihi</th>
-                    <th>Cinsiyet</th>
-                    <th>Sigorta Durumu</th>
-                    <th>Adres</th>
-                    <th>Roller</th>
-                    <th>İşlem</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    int index = 1;
-                    foreach (var kullanici in Model)
-                    {
+    <!-- Kullanıcı Tablosu -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered text-center align-middle" id="userTable">
+                    <thead class="table-dark">
                         <tr>
-                            <td>@index</td>
-                            <td>@kullanici.Ad</td>
-                            <td>@kullanici.Soyad</td>
-                            <td>@kullanici.DogumTarihi.ToString("dd.MM.yyyy")</td>
-                            <td>@kullanici.Cinsiyet</td>
-                            <td>@kullanici.SigortaDurumu</td>
-                            <td>@kullanici.Adres</td>
-                            <td>
-                                @if (roller != null && !string.IsNullOrEmpty(kullanici.IdentityUserId) && roller.ContainsKey(kullanici.IdentityUserId))
-                                {
-                                    foreach (var rol in roller[kullanici.IdentityUserId])
-                                    {
-                                        <span class="badge bg-secondary me-1">@rol</span>
-                                    }
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">Tanımsız</span>
-                                }
-                            </td>
-                            <td>
-                                <div class="d-flex flex-wrap gap-1 justify-content-center">
-                                    <a href="/Admin/User/ChangeRole/@kullanici.IdentityUserId" class="btn btn-outline-secondary btn-sm">
-                                        <i class="fa-solid fa-user-gear me-1"></i> Rol Değiştir
-                                    </a>
-                                    <a href="/Admin/Payments/Index/@kullanici.IdentityUserId" class="btn btn-outline-success btn-sm">
-                                        <i class="fa-solid fa-money-bill-wave me-1"></i> Ödemeler
-                                    </a>
-                                    <a href="/Admin/Prescriptions/Index/@kullanici.IdentityUserId" class="btn btn-outline-primary btn-sm">
-                                        <i class="fa-solid fa-prescription-bottle-medical me-1"></i> Reçeteler
-                                    </a>
-                                    <a href="/Admin/Appointment/Index/@kullanici.IdentityUserId" class="btn btn-outline-warning btn-sm">
-                                        <i class="fa-solid fa-calendar-check me-1"></i> Randevular
-                                    </a>
-                                    <a href="/Admin/ClinicReports/Index/@kullanici.IdentityUserId" class="btn btn-outline-danger btn-sm">
-                                        <i class="fa-solid fa-file-medical me-1"></i> Klinik Raporları
-                                    </a>
-                                    <a href="javascript:void(0);" onclick="confirmDelete('@kullanici.IdentityUserId')" class="btn btn-outline-danger btn-sm">
-                                        <i class="fa-solid fa-trash me-1"></i> Sil
-                                    </a>
-                                </div>
-                            </td>
+                            <th>#</th>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>Doğum Tarihi</th>
+                            <th>Cinsiyet</th>
+                            <th>Sigorta Durumu</th>
+                            <th>Adres</th>
+                            <th>Roller</th>
+                            <th>İşlem</th>
                         </tr>
-                        index++;
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="9" class="text-center text-muted">Hiç kullanıcı bulunamadı.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            int index = 1;
+                            foreach (var kullanici in Model)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@kullanici.Ad</td>
+                                    <td>@kullanici.Soyad</td>
+                                    <td>@kullanici.DogumTarihi.ToString("dd.MM.yyyy")</td>
+                                    <td>@kullanici.Cinsiyet</td>
+                                    <td>@kullanici.SigortaDurumu</td>
+                                    <td>@kullanici.Adres</td>
+                                    <td>
+                                        @if (roller != null && !string.IsNullOrEmpty(kullanici.IdentityUserId) && roller.ContainsKey(kullanici.IdentityUserId))
+                                        {
+                                            foreach (var rol in roller[kullanici.IdentityUserId])
+                                            {
+                                                <span class="badge bg-primary me-1">@rol</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Tanımsız</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa-solid fa-ellipsis-vertical me-1"></i> İşlem Seç
+                                            </button>
+                                            <ul class="dropdown-menu shadow-sm">
+                                                <li>
+                                                    <a class="dropdown-item" href="/Admin/User/ChangeRole/@kullanici.IdentityUserId">
+                                                        <i class="fa-solid fa-user-gear me-2"></i> Rol Değiştir
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="/Admin/Payments/Index/@kullanici.IdentityUserId">
+                                                        <i class="fa-solid fa-money bill-wave me-2"></i> Ödemeler
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="/Admin/Prescriptions/Index/@kullanici.IdentityUserId">
+                                                        <i class="fa-solid fa-prescription-bottle-medical me-2"></i> Reçeteler
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="/Admin/Appointment/Index/@kullanici.IdentityUserId">
+                                                        <i class="fa-solid fa-calendar-check me-2"></i> Randevular
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="/Admin/ClinicReports/Index/@kullanici.IdentityUserId">
+                                                        <i class="fa-solid fa-file-medical me-2"></i> Klinik Rấporları
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="confirmDelete('@kullanici.IdentityUserId')">
+                                                        <i class="fa-solid fa-trash me-2"></i> Sil
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center text-muted py-4">Hiç kullanıcı bulunamadı.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
+@section Styles {
+    <style type="text/css">
+        /* Tablo ve butonlar için özelleştirme */
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .btn {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-menu {
+            min-width: 200px;
+        }
+
+        .dropdown-item {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+
+            .dropdown-item i {
+                width: 20px;
+                text-align: center;
+            }
+
+        .badge {
+            font-size: 0.85rem;
+            padding: 0.4em 0.6em;
+        }
+
+        /* Hover efektleri */
+        .table-hover tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Kart gölgesi */
+        .card {
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Mobil uyumluluk */
+        @@media screen and (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.5rem;
+            }
+
+            .dropdown-menu {
+                min-width: 150px;
+            }
+
+            .dropdown-item {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+}
+
 @section Scripts {
     <script>
-        // 🔍 Arama kutusu ile filtreleme
+        // Arama kutusu ile filtreleme
         document.getElementById("searchInput").addEventListener("keyup", function () {
-            const filter = this.value.toLowerCase();
+            filterTable();
+        });
+
+        // Rol filtresi
+        document.getElementById("roleFilter").addEventListener("change", function () {
+            filterTable();
+        });
+
+        // Sigorta durumu filtresi
+        document.getElementById("statusFilter").addEventListener("change", function () {
+            filterTable();
+        });
+
+        // Tablo filtreleme fonksiyonu
+        function filterTable() {
+            const searchFilter = document.getElementById("searchInput").value.toLowerCase();
+            const roleFilter = document.getElementById("roleFilter").value.toLowerCase();
+            const statusFilter = document.getElementById("statusFilter").value.toLowerCase();
             const rows = document.querySelectorAll("#userTable tbody tr");
 
             rows.forEach(row => {
                 const ad = row.cells[1].textContent.toLowerCase();
                 const soyad = row.cells[2].textContent.toLowerCase();
-                const match = ad.includes(filter) || soyad.includes(filter);
-                row.style.display = match ? "" : "none";
-            });
-        });
+                const sigorta = row.cells[5].textContent.toLowerCase();
+                const roller = row.cells[7].textContent.toLowerCase();
 
-        // ❗ Kullanıcı silme onayı
+                const searchMatch = ad.includes(searchFilter) || soyad.includes(searchFilter);
+                const roleMatch = roleFilter === "" || roller.includes(roleFilter);
+                const statusMatch = statusFilter === "" || sigorta === statusFilter;
+
+                row.style.display = searchMatch && roleMatch && statusMatch ? "" : "none";
+            });
+        }
+
+        // Kullanıcı silme onayı
         function confirmDelete(userId) {
             if (confirm("Bu kullanıcıyı silmek istediğinizden emin misiniz?")) {
                 window.location.href = `/Admin/User/DeleteUser/${userId}`;
