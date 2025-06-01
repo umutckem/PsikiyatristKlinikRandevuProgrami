@@ -115,11 +115,11 @@
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item" href="/Admin/ClinicReports/Index/@kullanici.IdentityUserId">
-                                                        <i class="fa-solid fa-file-medical me-2"></i> Klinik Rấporları
+                                                        <i class="fa-solid fa-file-medical me-2"></i> Klinik Raporları
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="confirmDelete('@kullanici.IdentityUserId')">
+                                                    <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="showDeleteModal('@kullanici.IdentityUserId', '@kullanici.Ad @kullanici.Soyad')">
                                                         <i class="fa-solid fa-trash me-2"></i> Sil
                                                     </a>
                                                 </li>
@@ -138,6 +138,26 @@
                         }
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmModalLabel">Kullanıcı Silme Onayı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong id="deleteUserName"></strong> kullanıcısını silmek istediğinizden emin misiniz?</p>
+                    <p class="text-muted">Bu işlem geri alınamaz ve kullanıcının tüm verileri kalıcı olarak silinir.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Sil</button>
+                </div>
             </div>
         </div>
     </div>
@@ -190,6 +210,36 @@
             border-radius: 10px;
         }
 
+        /* Modal stilleri */
+        .modal-content {
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #e9ecef;
+            background-color: #f8f9fa;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+
+        .btn-outline-secondary {
+            transition: background-color 0.2s ease-in-out;
+        }
+
         /* Mobil uyumluluk */
         @@media screen and (max-width: 768px) {
             .table-responsive {
@@ -208,6 +258,10 @@
             .dropdown-item {
                 font-size: 0.8rem;
                 padding: 0.4rem 0.8rem;
+            }
+
+            .modal-dialog {
+                margin: 1rem;
             }
         }
     </style>
@@ -251,11 +305,20 @@
             });
         }
 
-        // Kullanıcı silme onayı
-        function confirmDelete(userId) {
-            if (confirm("Bu kullanıcıyı silmek istediğinizden emin misiniz?")) {
-                window.location.href = `/Admin/User/DeleteUser/${userId}`;
-            }
+        // Kullanıcı silme onayı için modal gösterme
+        let deleteUserId = null;
+        function showDeleteModal(userId, userName) {
+            deleteUserId = userId;
+            document.getElementById("deleteUserName").textContent = userName;
+            const modal = new bootstrap.Modal(document.getElementById("deleteConfirmModal"));
+            modal.show();
         }
+
+        // Silme işlemini onaylama
+        document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+            if (deleteUserId) {
+                window.location.href = `/Admin/User/DeleteUser/${deleteUserId}`;
+            }
+        });
     </script>
 }

@@ -5,21 +5,98 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    /* Özel stiller */
+    .appointment-table {
+        background-color: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+        .appointment-table th {
+            background-color: #1e3a8a; /* Profesyonel koyu mavi */
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px;
+        }
+
+        .appointment-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+            .appointment-table tbody tr:hover {
+                background-color: #f8fafc;
+            }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .filter-container {
+        background-color: #f1f5f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        border-radius: 6px;
+    }
+
+    .btn-back {
+        background-color: #6b7280;
+        color: white;
+        border-radius: 6px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        transition: background-color 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+        .btn-back:hover {
+            background-color: #4b5563;
+        }
+
+    .empty-state {
+        padding: 40px;
+        background-color: #f8fafc;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .button-container {
+        margin-top: 20px;
+        text-align: right;
+    }
+</style>
+
 <div class="container py-5">
-    <h2 class="mb-4 text-center fw-bold">Hasta Randevu Geçmişi</h2>
+    <h2 class="mb-4 text-center fw-bold text-dark">Hasta Randevu Geçmişi</h2>
+
+    <!-- Arama Alanı -->
+    <div class="filter-container">
+        <input type="text" id="searchInput" class="form-control" placeholder="Randevu ara (Tarih, Durum, Açıklama)" />
+    </div>
 
     <!-- Randevu Tablosu -->
-    <div class="table-responsive shadow-sm">
-        <table class="table table-bordered table-striped text-center align-middle">
-            <thead class="table-dark">
+    <div class="table-responsive appointment-table">
+        <table class="table table-striped text-center align-middle mb-0">
+            <thead>
                 <tr>
                     <th>#</th>
                     <th>Tarih & Saat</th>
                     <th>Durum</th>
                     <th>Açıklama</th>
+                    <th>İşlem</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="appointmentTable">
                 @if (Model != null && Model.Any())
                 {
                     int index = 1;
@@ -31,14 +108,22 @@
                             <td>
                                 @if (!string.IsNullOrWhiteSpace(randevu.Durum))
                                 {
-                                    <span class="badge bg-@GetDurumColor(randevu.Durum)">@randevu.Durum</span>
+                                    <span class="status-badge badge bg-@GetDurumColor(randevu.Durum)">@randevu.Durum</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">Bilinmiyor</span>
+                                    <span class="status-badge badge bg-secondary">Bilinmiyor</span>
                                 }
                             </td>
-                            <td>@randevu.Aciklama</td>
+                            <td>@(randevu.Aciklama?.Length > 40 ? randevu.Aciklama.Substring(0, 40) + "..." : randevu.Aciklama)</td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Randevu", new { id = randevu.Id })" class="btn btn-sm btn-outline-primary btn-action">
+                                    <i class="bi bi-pencil"></i> Düzenle
+                                </a>
+                                <a href="@Url.Action("Delete", "Randevu", new { id = randevu.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu randevuyu silmek istediğinize emin misiniz?');">
+                                    <i class="bi bi-trash"></i> Sil
+                                </a>
+                            </td>
                         </tr>
                         index++;
                     }
@@ -46,13 +131,47 @@
                 else
                 {
                     <tr>
-                        <td colspan="4" class="text-center text-muted">Randevu kaydı bulunamadı.</td>
+                        <td colspan="5" class="empty-state">
+                            <i class="bi bi-calendar-x text-muted" style="font-size: 2rem;"></i>
+                            <p class="text-muted mt-2">Randevu kaydı bulunamadı.</p>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
+    <!-- Geri Dön Butonu -->
+    <div class="button-container">
+        <a href="javascript:history.back()" class="btn btn-back">
+            <i class="bi bi-arrow-left me-2"></i> Geri Dön
+        </a>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Arama filtresi
+        document.getElementById("searchInput").addEventListener("input", function () {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll("#appointmentTable tr");
+
+            rows.forEach(row => {
+                let cells = row.getElementsByTagName("td");
+                let match = false;
+
+                for (let i = 1; i < cells.length - 1; i++) {
+                    if (cells[i].textContent.toLowerCase().includes(filter)) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                row.style.display = match ? "" : "none";
+            });
+        });
+    </script>
+}
 
 @functions {
     // Randevu durumuna göre rozet rengi seç
