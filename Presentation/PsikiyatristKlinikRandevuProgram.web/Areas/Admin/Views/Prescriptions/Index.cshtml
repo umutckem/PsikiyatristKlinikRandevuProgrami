@@ -100,11 +100,8 @@
                             <td>@recete.YazilmaTarihi.ToString("dd.MM.yyyy HH:mm")</td>
                             <td>@(recete.IlacBilgileri?.Length > 40 ? recete.IlacBilgileri.Substring(0, 40) + "..." : recete.IlacBilgileri)</td>
                             <td>@(recete.TedaviPlani?.Length > 40 ? recete.TedaviPlani.Substring(0, 40) + "..." : recete.TedaviPlani)</td>
-                            <td>
-                                <a href="@Url.Action("Edit", "Recete", new { id = recete.Id })" class="btn btn-sm btn-outline-primary btn-action">
-                                    <i class="bi bi-pencil"></i> Düzenle
-                                </a>
-                                <a href="@Url.Action("Delete", "Recete", new { id = recete.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu reçeteyi silmek istediğinize emin misiniz?');">
+                            <td>    
+                                <a href="@Url.Action("Delete", "Prescriptions", new { id = recete.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu reçeteyi silmek istediğinize emin misiniz?');">
                                     <i class="bi bi-trash"></i> Sil
                                 </a>
                             </td>

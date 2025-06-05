@@ -117,10 +117,7 @@
                             </td>
                             <td>@(randevu.Aciklama?.Length > 40 ? randevu.Aciklama.Substring(0, 40) + "..." : randevu.Aciklama)</td>
                             <td>
-                                <a href="@Url.Action("Edit", "Randevu", new { id = randevu.Id })" class="btn btn-sm btn-outline-primary btn-action">
-                                    <i class="bi bi-pencil"></i> Düzenle
-                                </a>
-                                <a href="@Url.Action("Delete", "Randevu", new { id = randevu.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu randevuyu silmek istediğinize emin misiniz?');">
+                                <a href="@Url.Action("Delete", "Appointment", new { id = randevu.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu randevuyu silmek istediğinize emin misiniz?');">
                                     <i class="bi bi-trash"></i> Sil
                                 </a>
                             </td>

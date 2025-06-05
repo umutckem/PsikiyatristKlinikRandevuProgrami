@@ -99,10 +99,7 @@
                             <td>@rapor.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</td>
                             <td class="text-start">@(rapor.RaporIcerigi?.Length > 40 ? rapor.RaporIcerigi.Substring(0, 40) + "..." : rapor.RaporIcerigi)</td>
                             <td>
-                                <a href="@Url.Action("Edit", "KlinikRapor", new { id = rapor.Id })" class="btn btn-sm btn-outline-primary btn-action">
-                                    <i class="bi bi-pencil"></i> Düzenle
-                                </a>
-                                <a href="@Url.Action("Delete", "KlinikRapor", new { id = rapor.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu raporu silmek istediğinize emin misiniz?');">
+                                <a href="@Url.Action("Delete", "ClinicReports", new { id = rapor.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu raporu silmek istediğinize emin misiniz?');">
                                     <i class="bi bi-trash"></i> Sil
                                 </a>
                             </td>

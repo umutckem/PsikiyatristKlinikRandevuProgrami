@@ -1,0 +1,138 @@
+﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.Recete
+
+@{
+    ViewData["Title"] = "Reçete Oluştur";
+}
+
+<style>
+    /* Sayfa genel arkaplan ve font */
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Container ile formun ortalanması ve genişlik ayarı */
+    .form-container {
+        max-width: 600px;
+        margin: 60px auto 60px auto;
+        background: #fff;
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+        /* Başlık */
+        .form-container h2 {
+            color: #0d6efd;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+    /* Form label */
+    label {
+        font-weight: 600;
+        color: #212529;
+    }
+
+    /* Textarea genişlik ve büyüklük */
+    textarea.form-control {
+        resize: vertical;
+        min-height: 140px;
+        font-size: 1.1rem;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: 1.5px solid #ced4da;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        textarea.form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 8px rgba(13, 110, 253, 0.3);
+            outline: none;
+        }
+
+    /* Submit butonu */
+    button[type="submit"] {
+        width: 100%;
+        background-color: #0d6efd;
+        border: none;
+        padding: 14px 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        button[type="submit"]:hover {
+            background-color: #0b5ed7;
+            box-shadow: 0 6px 18px rgba(11, 94, 215, 0.6);
+        }
+
+    /* Hata mesajları */
+    .invalid-feedback {
+        font-size: 0.9rem;
+        color: #dc3545;
+    }
+</style>
+
+<div class="form-container">
+    <h2>@ViewData["Title"]</h2>
+
+    <form action="Recete/Index" method="post" class="needs-validation" novalidate>
+        <input type="hidden" name="HastaId" value="@Model.HastaId" />
+        <input type="hidden" name="PsikiyatristId" value="@Model.PsikiyatristId" />
+        <input type="hidden" name="YazilmaTarihi" value="@Model.YazilmaTarihi.ToString("o")" />
+
+        <div class="mb-4">
+            <label for="IlacBilgileri">İlaç Bilgileri</label>
+            <textarea id="IlacBilgileri"
+                      name="IlacBilgileri"
+                      class="form-control"
+                      placeholder="İlaç bilgilerini buraya giriniz..."
+                      required>@Model.IlacBilgileri</textarea>
+            <div class="invalid-feedback">
+                Lütfen ilaç bilgilerini giriniz.
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="TedaviPlani">Tedavi Planı</label>
+            <textarea id="TedaviPlani"
+                      name="TedaviPlani"
+                      class="form-control"
+                      placeholder="Tedavi planını buraya giriniz..."
+                      required>@Model.TedaviPlani</textarea>
+            <div class="invalid-feedback">
+                Lütfen tedavi planını giriniz.
+            </div>
+        </div>
+
+        <button type="submit">Kaydet</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>

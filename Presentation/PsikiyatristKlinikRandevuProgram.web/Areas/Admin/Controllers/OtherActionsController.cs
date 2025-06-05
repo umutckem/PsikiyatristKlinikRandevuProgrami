@@ -7,7 +7,6 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class OtherActionsController : Controller
     {
-
         public IActionResult Index()
         {
             return View();

@@ -129,10 +129,7 @@
                             </td>
                             <td>@(odeme.Aciklama?.Length > 40 ? odeme.Aciklama.Substring(0, 40) + "..." : odeme.Aciklama)</td>
                             <td>
-                                <a href="@Url.Action("Edit", "Odeme", new { id = odeme.Id })" class="btn btn-sm btn-outline-primary btn-action">
-                                    <i class="bi bi-pencil"></i> Düzenle
-                                </a>
-                                <a href="@Url.Action("Delete", "Odeme", new { id = odeme.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu ödemeyi silmek istediğinize emin misiniz?');">
+                                <a href="@Url.Action("Delete", "Payments", new { id = odeme.Id })" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('Bu ödemeyi silmek istediğinize emin misiniz?');">
                                     <i class="bi bi-trash"></i> Sil
                                 </a>
                             </td>
