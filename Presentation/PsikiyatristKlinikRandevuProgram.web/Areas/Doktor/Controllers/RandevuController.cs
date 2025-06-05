@@ -22,12 +22,12 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // Get the current doctor's ID
+            
             var doctorId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var randevular = _randevuQueryService.GetRandevularByPsikiyatristId(doctorId);
 
-            // Pass doctor's name to ViewBag (you may already have this logic elsewhere)
-            ViewBag.DoktorAdi = "Doktor"; // Replace with actual logic to fetch name
+            
+            ViewBag.DoktorAdi = "Doktor"; 
             ViewBag.DoktorSoyadi = "Soyadı";
 
             return View(randevular);

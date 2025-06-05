@@ -1,7 +1,7 @@
-﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.KlinikRapor
+﻿@model List<PsikiyatristKlinikRandevuProgrami.Core.Model.KlinikRapor>
 
 @{
-    ViewData["Title"] = "Rapor Detayları";
+    ViewData["Title"] = "Hasta Raporları";
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -10,40 +10,48 @@
 <div class="container py-5">
     <div class="card shadow-lg border-0">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="fas fa-file-medical-alt me-2"></i>Rapor Detayları</h4>
+            <h4 class="mb-0"><i class="fas fa-file-medical-alt me-2"></i>Hasta Raporları</h4>
         </div>
 
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-sm-4 fw-bold text-muted">🆔 Rapor ID:</div>
-                <div class="col-sm-8">@Model.Id</div>
-            </div>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var rapor = Model[i];
+                <div class="border rounded mb-4 p-3 bg-light">
+                    <h5 class="text-primary fw-semibold mb-3">Rapor @(i + 1)</h5>
 
-            <div class="row mb-3">
-                <div class="col-sm-4 fw-bold text-muted">🧑‍🤝‍🧑 Hasta ID:</div>
-                <div class="col-sm-8 text-break"><code>@Model.HastaId</code></div>
-            </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-bold text-muted">🆔 Rapor ID:</div>
+                        <div class="col-sm-8">@rapor.Id</div>
+                    </div>
 
-            <div class="row mb-3">
-                <div class="col-sm-4 fw-bold text-muted">🧑‍⚕️ Psikiyatrist ID:</div>
-                <div class="col-sm-8 text-break"><code>@Model.PsikiyatristId</code></div>
-            </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-bold text-muted">🧑‍🤝‍🧑 Hasta ID:</div>
+                        <div class="col-sm-8 text-break"><code>@rapor.HastaId</code></div>
+                    </div>
 
-            <div class="row mb-3">
-                <div class="col-sm-4 fw-bold text-muted">📝 Rapor İçeriği:</div>
-                <div class="col-sm-8">
-                    <div class="border p-3 bg-light rounded">
-                        @Html.Raw(Model.RaporIcerigi.Replace("\n", "<br />"))
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-bold text-muted">🧑‍⚕️ Psikiyatrist ID:</div>
+                        <div class="col-sm-8 text-break"><code>@rapor.PsikiyatristId</code></div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-bold text-muted">📝 Rapor İçeriği:</div>
+                        <div class="col-sm-8">
+                            <div class="border p-3 bg-white rounded">
+                                @Html.Raw(rapor.RaporIcerigi.Replace("\n", "<br />"))
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-bold text-muted">📅 Oluşturulma Tarihi:</div>
+                        <div class="col-sm-8">@rapor.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</div>
                     </div>
                 </div>
-            </div>
+            }
 
-            <div class="row mb-4">
-                <div class="col-sm-4 fw-bold text-muted">📅 Oluşturulma Tarihi:</div>
-                <div class="col-sm-8">@Model.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</div>
-            </div>
-
-            <div class="text-center">
+            <div class="text-center mt-4">
                 <a href="@Url.Action("Index", "Raporlar", new { area = "Doktor" })" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-1"></i> Geri Dön
                 </a>

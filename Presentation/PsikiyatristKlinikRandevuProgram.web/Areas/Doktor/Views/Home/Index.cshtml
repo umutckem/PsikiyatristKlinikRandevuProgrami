@@ -153,6 +153,10 @@
 <body>
     <div class="sidebar">
         <div class="sidebar-header">Klinik Paneli</div>
+
+        <a href="/Home/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && string.IsNullOrEmpty(ViewContext.RouteData.Values["area"]?.ToString()) ? "active" : "")">
+            Ana Sayfa
+        </a>
         <a href="/Doktor/Home/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
             Ana Menu
         </a>
@@ -162,15 +166,15 @@
         <a href="/Doktor/Notlar/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Notlar" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
             Notlar
         </a>
+        <a href="/Doktor/Raporlar/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Raporlar" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
+            Raporlar
+        </a>
         <a href="/Doktor/Ayarlar/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Ayarlar" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
             Ayarlar
         </a>
-        <a href="/Doktor/Bildirimler/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Bildirimler" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
-            Bildirimler
-        </a>
-        <a href="/Doktor/Raporlar/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Bildirimler" && ViewContext.RouteData.Values["area"]?.ToString() == "Doktor" ? "active" : "")">
-            Raporlar
-        </a>
+
+
+
     </div>
 
     <div class="content">

@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Doktor Paneli";
+    var hastalar = ViewBag.Randevular as List<PsikiyatristKlinikRandevuProgrami.Core.Model.Kullanici>;
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -15,75 +16,46 @@
 
     <div class="mb-4">
         <h2 class="fw-bold text-primary">👨‍⚕️ Hoş Geldiniz, @ViewBag.DoktorAdiSoyadi</h2>
-        <p class="text-muted">Aşağıdan hastalarınıza ait klinik randevu raporlarını görüntüleyebilirsiniz.</p>
+        <p class="text-muted">Aşağıdan hastalarınıza ait klinik bilgileri ve işlem seçeneklerini görüntüleyebilirsiniz.</p>
     </div>
 
     <div class="card shadow-sm border-0">
         <div class="card-header bg-primary text-white fw-semibold">
-            Klinik Raporlar
+            Hastalarım
         </div>
         <div class="card-body">
-            @if (ViewBag.Randevular != null && ViewBag.Randevular.Count > 0)
+            @if (hastalar != null && hastalar.Count > 0)
             {
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
                                 <th>#</th>
-                                @if (ViewBag.Randevular[0].GetType().GetProperty("HastaId") != null)
-                                {
-                                    <th>Hasta ID</th>
-                                }
-                                @if (ViewBag.Randevular[0].GetType().GetProperty("PsikiyatristId") != null)
-                                {
-                                    <th>Psikiyatrist ID</th>
-                                }
-                                @if (ViewBag.Randevular[0].GetType().GetProperty("Durum") != null)
-                                {
-                                    <th>Durum</th>
-                                }
-                                @if (ViewBag.Randevular[0].GetType().GetProperty("Tarih") != null)
-                                {
-                                    <th>Tarih</th>
-                                }
+                                <th>Ad</th>
+                                <th>Soyad</th>
+                                <th>Cinsiyet</th>
+                                <th>Doğum Tarihi</th>
+                                <th>Adres</th>
+                                <th>Sigorta Durumu</th>
                                 <th>İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (dynamic rapor in ViewBag.Randevular)
+                            @for (int i = 0; i < hastalar.Count; i++)
                             {
+                                var hasta = hastalar[i];
                                 <tr>
-                                    <td>@rapor.Id</td>
-                                    @if (rapor.GetType().GetProperty("HastaId") != null)
-                                    {
-                                        <td><code>@rapor.HastaId.ToString().Substring(0, 8)...</code></td>
-                                    }
-                                    @if (rapor.GetType().GetProperty("PsikiyatristId") != null)
-                                    {
-                                        <td><code>@rapor.PsikiyatristId.ToString().Substring(0, 8)...</code></td>
-                                    }
-                                    @if (rapor.GetType().GetProperty("Durum") != null)
-                                    {
-                                        <td>
-                                            <span class="badge @GetStatusBadgeClass(rapor.Durum)">
-                                                @rapor.Durum
-                                            </span>
-                                        </td>
-                                    }
-                                    @if (rapor.GetType().GetProperty("Tarih") != null)
-                                    {
-                                        <td>@rapor.Tarih.ToString("dd.MM.yyyy")</td>
-                                    }
+                                    <td>@(i + 1)</td>
+                                    <td>@hasta.Ad</td>
+                                    <td>@hasta.Soyad</td>
+                                    <td>@hasta.Cinsiyet</td>
+                                    <td>@hasta.DogumTarihi.ToString("dd.MM.yyyy")</td>
+                                    <td>@hasta.Adres</td>
+                                    <td>@hasta.SigortaDurumu</td>
                                     <td>
-                                        <a href="@Url.Action("Details", "Raporlar", new { id = rapor.Id })"
+                                        <a href="@Url.Action("Details", "Raporlar", new { id = hasta.IdentityUserId })"
                                            class="btn btn-outline-primary btn-sm me-1">
                                             <i class="fas fa-eye"></i> Detay
-                                        </a>
-
-                                        <a href="@Url.Action("Sil", "Raporlar", new { id = rapor.Id })"
-                                           class="btn btn-outline-danger btn-sm"
-                                           onclick="return confirm('Bu raporu silmek istediğinize emin misiniz?');">
-                                            <i class="fas fa-trash-alt"></i> Sil
                                         </a>
                                     </td>
                                 </tr>
@@ -95,7 +67,7 @@
             else
             {
                 <div class="alert alert-info text-center m-0">
-                    <i class="fas fa-info-circle me-2"></i> Henüz rapor bulunmamaktadır.
+                    <i class="fas fa-info-circle me-2"></i> Henüz hasta bilgisi bulunmamaktadır.
                 </div>
             }
 
@@ -107,26 +79,6 @@
         </div>
     </div>
 </div>
-
-@functions {
-    public string GetStatusBadgeClass(string status)
-    {
-        switch (status?.ToLower())
-        {
-            case "tamamlandı":
-            case "completed":
-                return "bg-success text-white";
-            case "iptal":
-            case "cancelled":
-                return "bg-danger text-white";
-            case "beklemede":
-            case "pending":
-                return "bg-warning text-dark";
-            default:
-                return "bg-secondary text-white";
-        }
-    }
-}
 
 <style>
     .table th, .table td {

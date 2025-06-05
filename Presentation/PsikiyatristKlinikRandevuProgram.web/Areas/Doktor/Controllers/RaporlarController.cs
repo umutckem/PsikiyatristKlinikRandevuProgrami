@@ -49,49 +49,28 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Doktor.Controllers
                 .ToList();
 
             ViewBag.DoktorAdiSoyadi = doktorBilgileri.Ad + " " + doktorBilgileri.Soyad;
-            ViewBag.Randevular = doktorRandevular;
+
+            var doktorKullanicibilgileri = kullaniciBilgileri
+            .Where(x => doktorRandevular.Any(r => r.HastaId == Guid.Parse(x.IdentityUserId)))
+            .ToList();
+
+
+            ViewBag.Randevular = doktorKullanicibilgileri;
 
             return View("Index");
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var raporlar = _klinikRaporQueryService.GetAllKlinikRaporlar();
-            var rapor = raporlar.FirstOrDefault(x => x.Id == id);
-            if (rapor == null)
+            var raporlar = _klinikRaporQueryService.GetAllKlinikRaporlar()
+                            .Where(x => x.HastaId == id)
+                            .ToList();
+
+            if (raporlar == null || !raporlar.Any())
                 return NotFound();
 
-            var viewModel = new KlinikRapor
-            {
-                Id = rapor.Id,
-                HastaId = rapor.HastaId,
-                PsikiyatristId = rapor.PsikiyatristId,
-                RaporIcerigi = rapor.RaporIcerigi,
-                OlusturmaTarihi = rapor.OlusturmaTarihi
-            };
-
-            return View(viewModel);
+            return View(raporlar);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Sil(int id)
-        {
-            var raporlar = _klinikRaporQueryService.GetAllKlinikRaporlar();
-            var rapor = raporlar.FirstOrDefault(x => x.Id == id);
-
-            if (rapor == null)
-            {
-                TempData["ErrorMessage"] = "Rapor bulunamadı.";
-                return RedirectToAction("Index");
-            }
-
-            _klinikRaporCommandService.DeleteKlinikRapor(id);
-            return RedirectToAction("Index");
-        }
-
-
-
-
     }
 }
