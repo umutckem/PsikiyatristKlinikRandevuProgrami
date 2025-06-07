@@ -1,19 +1,16 @@
-﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.UpdateCommand
 {
-    public class UpdateReceteCommand
+    using PsikiyatristKlinikRandevuProgrami.Core.Model;
+    public class UpdateReceteCommand : ICommand
     {
         private readonly IReceteCommandService _commandService;
-        private readonly Core.Model.Recete _recete;
+        private readonly Recete _recete;
 
-        public UpdateReceteCommand(IReceteCommandService commandService, Core.Model.Recete recete)
+        public UpdateReceteCommand(IReceteCommandService commandService, Recete recete)
         {
             _commandService = commandService;
             _recete = recete;

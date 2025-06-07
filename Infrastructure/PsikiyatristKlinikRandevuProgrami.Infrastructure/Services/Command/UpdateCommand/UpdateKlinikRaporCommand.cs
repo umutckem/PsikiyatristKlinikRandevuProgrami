@@ -1,20 +1,16 @@
-﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.UpdateCommand
 {
-    public class UpdateKlinikRaporCommand
+    using PsikiyatristKlinikRandevuProgrami.Core.Model;
+    public class UpdateKlinikRaporCommand : ICommand
     {
-
         private readonly IKlinikRaporCommandService _commandService;
-        private readonly Core.Model.KlinikRapor _klinikRapor;
+        private readonly KlinikRapor _klinikRapor;
 
-        public UpdateKlinikRaporCommand(IKlinikRaporCommandService commandService, Core.Model.KlinikRapor klinikRapor)
+        public UpdateKlinikRaporCommand(IKlinikRaporCommandService commandService, KlinikRapor klinikRapor)
         {
             _commandService = commandService;
             _klinikRapor = klinikRapor;

@@ -1,20 +1,16 @@
 ﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.AddCommand
 {
+    using PsikiyatristKlinikRandevuProgrami.Core.Model;
     public class AddRandevuCommand : ICommand
     {
         private readonly IRandevuCommandService _commandService;
-        private readonly Core.Model.Randevu _randevu;
+        private readonly Randevu _randevu;
 
-        public AddRandevuCommand(IRandevuCommandService commandService, Core.Model.Randevu randevu)
+        public AddRandevuCommand(IRandevuCommandService commandService, Randevu randevu)
         {
             _commandService = commandService;
             _randevu = randevu;

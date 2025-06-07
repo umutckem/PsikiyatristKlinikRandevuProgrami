@@ -1,19 +1,16 @@
-﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.UpdateCommand
 {
-    public class UpdateOdemeCommand
+    using PsikiyatristKlinikRandevuProgrami.Core.Model;
+    public class UpdateOdemeCommand : ICommand
     {
         private readonly IOdemeCommandService _commandService;
-        private readonly Core.Model.Odeme _odeme;
+        private readonly Odeme _odeme;
 
-        public UpdateOdemeCommand(IOdemeCommandService commandService, Core.Model.Odeme odeme)
+        public UpdateOdemeCommand(IOdemeCommandService commandService, Odeme odeme)
         {
             _commandService = commandService;
             _odeme = odeme;

@@ -1,18 +1,16 @@
-﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+using PsikiyatristKlinikRandevuProgrami.Core.Model;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.AddCommand
 {
-    public class AddKullaniciCommand
+    using PsikiyatristKlinikRandevuProgrami.Core.Model;
+    public class AddKullaniciCommand : ICommand
     {
         private readonly IKullaniciCommandService _commandService;
-        private readonly Core.Model.Kullanici _kullanici;
+        private readonly Kullanici _kullanici;
 
-        public AddKullaniciCommand(IKullaniciCommandService commandService, Core.Model.Kullanici kullanici)
+        public AddKullaniciCommand(IKullaniciCommandService commandService, Kullanici kullanici)
         {
             _commandService = commandService;
             _kullanici = kullanici;

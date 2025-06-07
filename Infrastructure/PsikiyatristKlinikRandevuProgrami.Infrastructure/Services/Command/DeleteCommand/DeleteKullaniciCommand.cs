@@ -1,13 +1,9 @@
-﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.DeleteCommand
 {
-    public class DeleteKullaniciCommand
+    public class DeleteKullaniciCommand : ICommand
     {
         private readonly IKullaniciCommandService _commandService;
         private readonly int _kullaniciId;

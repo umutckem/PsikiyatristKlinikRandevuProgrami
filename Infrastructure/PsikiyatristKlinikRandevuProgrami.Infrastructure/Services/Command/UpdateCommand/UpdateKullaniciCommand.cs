@@ -1,19 +1,16 @@
-﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
+﻿using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
+using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.UpdateCommand
 {
-    public class UpdateKullaniciCommand
+    using PsikiyatristKlinikRandevuProgrami.Core.Model;
+    public class UpdateKullaniciCommand : ICommand
     {
         private readonly IKullaniciCommandService _commandService;
-        private readonly Core.Model.Kullanici _kullanici;
+        private readonly Kullanici _kullanici;
 
-        public UpdateKullaniciCommand(IKullaniciCommandService commandService, Core.Model.Kullanici kullanici)
+        public UpdateKullaniciCommand(IKullaniciCommandService commandService, Kullanici kullanici)
         {
             _commandService = commandService;
             _kullanici = kullanici;

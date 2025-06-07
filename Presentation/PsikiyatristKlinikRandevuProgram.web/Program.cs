@@ -56,7 +56,9 @@ namespace PsikiyatristKlinikRandevuProgram.web
             builder.Services.AddScoped<ISubject, Subject>();
             builder.Services.AddScoped<IObserver, BildirimObserver>();
 
-            
+            builder.Services.AddScoped<CommandInvoker>(); // Buraya eklendi
+
+
             builder.Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(typeof(GetRandevularByPsikiyatristIdQueryHandler).Assembly);

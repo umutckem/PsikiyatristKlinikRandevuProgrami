@@ -4,23 +4,33 @@ using Microsoft.AspNetCore.Mvc;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries;
 using PsikiyatristKlinikRandevuProgrami.Application.Recete.Queries;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services; // CommandInvoker
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Command.DeleteCommand; // DeleteReceteCommand
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
+namespace PsikiyatristKlinikRandevuProgrami.web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class PrescriptionsController : Controller
     {
-        private readonly IReceteCommandService _receteCommandService;
-        private readonly IReceteQueryService _receteQueryService;
         private readonly IMediator _mediator;
+        private readonly IReceteQueryService _receteQueryService;
+        private readonly IReceteCommandService _receteCommandService;
+        private readonly CommandInvoker _commandInvoker;
 
-        public PrescriptionsController(IMediator mediator, IReceteCommandService receteCommandService, IReceteQueryService receteQueryService)
+        public PrescriptionsController(
+            IMediator mediator,
+            IReceteQueryService receteQueryService,
+            IReceteCommandService receteCommandService,
+            CommandInvoker commandInvoker)
         {
             _mediator = mediator;
-            _receteCommandService = receteCommandService;
             _receteQueryService = receteQueryService;
+            _receteCommandService = receteCommandService;
+            _commandInvoker = commandInvoker;
         }
 
         public async Task<IActionResult> Index(Guid id)
@@ -30,19 +40,19 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
             return View(kullaniciReceteleri);
         }
 
-
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var receteler = _receteQueryService.GetAllReceteler();
-            var silinecekRecete = receteler.FirstOrDefault(x => x.Id == id);
-            if(silinecekRecete is not null)
-            {
-                _receteCommandService.DeleteRecete(id);
-                TempData["Message"] = "Reçete başarıyla silindi.";
+            var recete = _receteQueryService.GetAllReceteler()
+                                            .FirstOrDefault(x => x.Id == id);
 
-                return RedirectToAction("Index", "User", new { area = "Admin" });
+            if (recete is not null)
+            {
+                var deleteCommand = new DeleteReceteCommand(_receteCommandService, id);
+                _commandInvoker.ExecuteCommand(deleteCommand);
+                TempData["Message"] = "Reçete başarıyla silindi.";
             }
+
             return RedirectToAction("Index", "User", new { area = "Admin" });
         }
     }
