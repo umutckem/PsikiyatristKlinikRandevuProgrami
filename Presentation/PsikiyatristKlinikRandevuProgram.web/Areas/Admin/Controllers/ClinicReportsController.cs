@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Application.KlinikRapor.Queries;
-using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.Randevu;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services.KlinikRapor; // EKLENDİ: Singleton için
 using System.Threading.Tasks;
 
 namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
@@ -33,7 +33,7 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
         {
             if (id != 0)
             {
-                _klinikRaporCommandService.DeleteKlinikRapor(id);
+                KlinikRaporManager.Instance.SilRapor(id); // 🔁 Singleton ile silme işlemi
             }
             return RedirectToAction("Index", "User", new { area = "Admin" });
         }

@@ -58,7 +58,6 @@ namespace PsikiyatristKlinikRandevuProgram.web
 
             builder.Services.AddScoped<CommandInvoker>(); // Buraya eklendi
 
-
             builder.Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(typeof(GetRandevularByPsikiyatristIdQueryHandler).Assembly);
@@ -87,6 +86,9 @@ namespace PsikiyatristKlinikRandevuProgram.web
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
+
+            // GÜNCEL: KlinikRaporManager'a root IServiceProvider gönderildi (dispose edilmez)
+            KlinikRaporManager.Instance.Configure(app.Services);
 
             // Middleware
             if (app.Environment.IsDevelopment())
