@@ -1,0 +1,117 @@
+﻿@model PsikiyatristKlinikRandevuProgrami.Core.Model.GeriBildirim
+
+@{
+    ViewData["Title"] = "Geri Bildirim Gönder";
+}
+
+<!-- FontAwesome ikonu için -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #eef2f7;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-container {
+        width: 90%;
+        max-width: 600px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .btn-success {
+        width: 100%;
+        background-color: #16a34a;
+        border: none;
+        padding: 10px;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        margin-top: 15px;
+    }
+
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+</style>
+
+<div class="form-container">
+    <h2><i class="fas fa-comment-dots me-2"></i>Geri Bildirim Formu</h2>
+
+    <a href="@Url.Action("Index", "GeriBildirim", new { area = "Hasta" })" class="btn btn-secondary">← Geri Dön</a>
+
+    <form method="post" action="/Hasta/GeriBildirim/Gonder">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label for="kategori">Kategori</label>
+            <input type="text" name="Kategori" id="kategori" class="form-control" placeholder="Örn: Randevu, Sistem, Doktor" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="tur">Tür</label>
+            <select name="Tur" id="tur" class="form-select" required>
+                <option value="">Seçiniz</option>
+                <option value="Öneri">Öneri</option>
+                <option value="Şikayet">Şikayet</option>
+                <option value="Teşekkür">Teşekkür</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="aciklama">Açıklama</label>
+            <textarea name="Aciklama" id="aciklama" class="form-control" rows="4" placeholder="Geri bildiriminizi buraya yazınız..." required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="puan">Puan (1–5 arası)</label>
+            <input type="number" name="Puan" id="puan" class="form-control" min="1" max="5" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-paper-plane me-1"></i> Gönder
+        </button>
+    </form>
+</div>

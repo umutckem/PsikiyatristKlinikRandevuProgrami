@@ -1,0 +1,142 @@
+﻿@model List<PsikiyatristKlinikRandevuProgrami.Core.Model.Randevu>
+
+@{
+    ViewData["Title"] = "Onaylı Randevular ve Geri Bildirim";
+}
+
+<!-- Font Awesome İkon Desteği -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #eef2f7;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 900px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .btn-secondary {
+        display: inline-block;
+        margin-bottom: 20px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .table {
+        width: 100%;
+        margin-top: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+        .table thead th {
+            background-color: #2563eb;
+            color: white;
+            text-align: center;
+        }
+
+        .table tbody td {
+            text-align: center;
+            vertical-align: middle;
+            background-color: #fff;
+        }
+
+    .btn-feedback {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        padding: 6px 14px;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-feedback:hover {
+            background-color: #1e40af;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+        }
+
+        .btn-feedback i {
+            font-size: 0.95rem;
+        }
+
+    p {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #666;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <h2>Onaylanmış Randevular</h2>
+
+    <a href="/Hasta/Home/Index" class="btn btn-secondary">← Geri Dön</a>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>Açıklama</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.TarihSaat.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@r.Aciklama</td>
+                        <td>
+                            <a href="@Url.Action("Gonder", "GeriBildirim", new { area = "Hasta", randevuId = r.Id })"
+                               class="btn-feedback">
+                                <i class="fas fa-comment-dots"></i> Geri Bildirim
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Henüz onaylanmış bir randevunuz bulunmamaktadır.</p>
+    }
+</div>

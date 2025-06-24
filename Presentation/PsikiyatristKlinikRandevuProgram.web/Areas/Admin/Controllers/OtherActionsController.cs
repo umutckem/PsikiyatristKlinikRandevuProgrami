@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PsikiyatristKlinikRandevuProgrami.Application.Interfaces;
-using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
-using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries;
-using PsikiyatristKlinikRandevuProgrami.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
 
 namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
 {
@@ -11,17 +9,26 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class OtherActionsController : Controller
     {
-        private readonly KullaniciServiceAdapter _kullaniciAdapter;
+        private readonly ApplicationDbContext _context;
 
-        public OtherActionsController(IKullaniciCommandService commandService, IKullaniciQueryService queryService)
+        public OtherActionsController(ApplicationDbContext context)
         {
-            _kullaniciAdapter = new KullaniciServiceAdapter(commandService, queryService);
+            _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var kullanicilar = await _kullaniciAdapter.kullanicis(); 
-            return View(kullanicilar);
+            return View(); // Sadece buton var
+        }
+
+        public async Task<IActionResult> Sikayetler()
+        {
+            var sikayetler = await _context.geriBildirims
+                .Where(g => g.Tur == "Şikayet")
+                .OrderByDescending(g => g.OlusturmaTarihi)
+                .ToListAsync();
+
+            return View(sikayetler);
         }
     }
 }
