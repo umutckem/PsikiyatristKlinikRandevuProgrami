@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR; // Add for SignalR
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Commands;
 using PsikiyatristKlinikRandevuProgrami.Application.Interfaces.Queries;
 using PsikiyatristKlinikRandevuProgrami.Core.Model;
 using PsikiyatristKlinikRandevuProgrami.Infrastructure.Data;
-using PsikiyatristKlinikRandevuProgrami.Web.Hubs; // Add for AppointmentHub
+using PsikiyatristKlinikRandevuProgrami.Web.Hubs;
 using System;
+using System.Linq;
 using System.Security.Claims;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 
@@ -22,14 +24,14 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
         private readonly IRandevuQueryService _randevuQueryService;
         private readonly IMediator _mediator;
         private readonly ApplicationDbContext _context;
-        private readonly IHubContext<AppointmentHub> _hubContext; // Add IHubContext
+        private readonly IHubContext<AppointmentHub> _hubContext;
 
         public RandevularController(
             IRandevuQueryService randevuQueryService,
             IRandevuCommandService randevuCommandService,
             IMediator mediator,
             ApplicationDbContext context,
-            IHubContext<AppointmentHub> hubContext) // Inject IHubContext
+            IHubContext<AppointmentHub> hubContext)
         {
             _randevuQueryService = randevuQueryService;
             _randevuCommandService = randevuCommandService;
@@ -41,13 +43,11 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            // Doktorların userId'lerini al (roleId ile filtreli)
             var doktorUserIds = await _context.UserRoles
                 .Where(x => x.RoleId == "b867058d-f804-456c-91cf-ef30821df712")
                 .Select(x => x.UserId)
                 .ToListAsync();
 
-            // Doktorların Kullanici modeli karşılıklarını çek
             var doktorlar = await _context.kullanicis
                 .Where(k => doktorUserIds.Contains(k.IdentityUserId))
                 .Select(k => new
@@ -58,14 +58,11 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
                 })
                 .ToListAsync();
 
-            // Hasta ID
             var hastaId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            // Randevuları çek
             var randevular = _randevuQueryService.GetAllRandevular()
                 .FindAll(r => r.HastaId == hastaId);
 
-            // Doktorlar + randevular ViewBag içine koyabilirsin
             ViewBag.Doktorlar = doktorlar;
             ViewBag.Randevular = randevular;
 
@@ -78,10 +75,10 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             var hastaId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var randevu = _randevuQueryService.GetAllRandevular()
                 .FirstOrDefault(r => r.Id == id && r.HastaId == hastaId);
+
             if (randevu == null)
-            {
                 return NotFound();
-            }
+
             return Json(new
             {
                 id = randevu.Id,
@@ -91,7 +88,6 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             });
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult RandevuOlustur(Randevu model)
@@ -100,29 +96,27 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             {
                 model.Durum = "Beklemede";
                 model.HastaId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
                 if (!ModelState.IsValid)
                 {
                     var errors = ModelState.Values.SelectMany(v => v.Errors)
-                                  .Select(e => e.ErrorMessage)
-                                  .ToList();
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
+
                     Console.WriteLine($"ModelState Errors: {string.Join(", ", errors)}");
-                    var hastaId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    var hastaId = model.HastaId;
                     ViewBag.Randevular = _randevuQueryService.GetAllRandevular()
                         .FindAll(r => r.HastaId == hastaId);
                     return View("Index", model);
                 }
 
-                Console.WriteLine($"Saving Randevu: Id={model.Id}, HastaId={model.HastaId}, PsikiyatristId={model.PsikiyatristId}, TarihSaat={model.TarihSaat}, Durum={model.Durum}");
                 _randevuCommandService.AddRandevu(model);
-                Console.WriteLine($"After Save Randevu Id: {model.Id}");
 
-                // Verify database state
                 var savedRandevu = _context.randevus.FirstOrDefault(r => r.Id == model.Id);
                 if (savedRandevu == null)
                 {
-                    Console.WriteLine("Error: Randevu not found in database after save.");
                     ModelState.AddModelError("", "Randevu kaydedilemedi.");
-                    var hastaId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    var hastaId = model.HastaId;
                     ViewBag.Randevular = _randevuQueryService.GetAllRandevular()
                         .FindAll(r => r.HastaId == hastaId);
                     return View("Index", model);
@@ -130,6 +124,7 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
 
                 var hasta = _context.kullanicis
                     .FirstOrDefault(k => k.IdentityUserId == model.HastaId.ToString());
+
                 var hastaAdi = hasta != null ? $"{hasta.Ad} {hasta.Soyad}" : User.Identity.Name;
 
                 var doctorUserId = model.PsikiyatristId.ToString();
@@ -150,6 +145,53 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetAvailableSlots(string psikiyatristId)
+        {
+            if (string.IsNullOrEmpty(psikiyatristId))
+                return BadRequest();
 
+            var allRandevular = _randevuQueryService.GetAllRandevular()
+                .Where(r => r.PsikiyatristId.ToString() == psikiyatristId)
+                .Select(r => r.TarihSaat)
+                .ToList();
+
+            var now = DateTime.Now;
+            var result = new Dictionary<string, List<object>>();
+            var culture = new System.Globalization.CultureInfo("tr-TR");
+
+            for (int day = 0; day < 15; day++)
+            {
+                var currentDate = now.Date.AddDays(day);
+                var gunlukList = new List<object>();
+
+                for (int hour = 8; hour < 16; hour++)
+                {
+                    for (int minute = 0; minute < 60; minute += 30)
+                    {
+                        var slot = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, hour, minute, 0);
+
+                        if (slot <= now) continue;
+
+                        if (!allRandevular.Any(r => r == slot))
+                        {
+                            gunlukList.Add(new
+                            {
+                                raw = slot.ToString("s"),
+                                label = slot.ToString("HH:mm")
+                            });
+                        }
+                    }
+                }
+
+                if (gunlukList.Any())
+                {
+                    var gunBasligi = currentDate.ToString("dddd, dd MMMM yyyy", culture);
+                    result.Add(gunBasligi, gunlukList);
+                }
+            }
+
+            return Json(result);
+        }
     }
 }

@@ -6,8 +6,10 @@
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+<script src="~/js/site.js"></script>
 
 <style>
     body {
@@ -43,229 +45,77 @@
             border-radius: 2px;
         }
 
-    form {
-        background: white;
-        padding: 2rem;
-        border-radius: 16px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        max-width: 600px;
-        margin: 0 auto 3rem;
-        transition: transform 0.2s ease;
-    }
-
-        form:hover {
-            transform: translateY(-2px);
-        }
-
-    .form-group label {
-        font-weight: 500;
-        color: #4a5568;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-
-    .form-control {
-        border-radius: 10px;
-        border: 1px solid #e2e8f0;
-        padding: 0.75rem;
-        transition: all 0.3s ease;
-    }
-
-        .form-control:focus {
-            border-color: #3182ce;
-            box-shadow: 0 0 8px rgba(49, 130, 206, 0.2);
-            outline: none;
-        }
-
-    .btn-primary {
-        border-radius: 50px;
-        padding: 0.75rem 2rem;
-        font-weight: 600;
-        background-color: #3182ce;
+    .doktor-kart.selected {
+        background-color: #e6f3ff;
         border-color: #3182ce;
-        transition: all 0.3s ease;
     }
 
-        .btn-primary:hover {
-            background-color: #2b6cb0;
-            border-color: #2b6cb0;
-            transform: translateY(-1px);
-        }
-
-    .btn-back {
-        border-radius: 50px;
-        padding: 0.75rem 2rem;
-        font-weight: 600;
-        background-color: #6b7280;
-        border-color: #6b7280;
-        color: white;
-        margin-left: 1rem;
-        transition: all 0.3s ease;
-    }
-
-        .btn-back:hover {
-            background-color: #4a5568;
-            border-color: #4a5568;
-            transform: translateY(-1px);
-        }
-
-    hr {
-        margin: 3rem 0;
-        border-color: #e2e8f0;
-        opacity: 0.5;
-    }
-
-    table {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        max-width: 800px;
-        margin: 0 auto;
-        overflow: hidden;
-    }
-
-        table thead {
-            background-color: #3182ce;
-            color: white;
-        }
-
-        table th, table td {
-            vertical-align: middle;
-            padding: 1rem;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        table tbody tr {
-            transition: background-color 0.2s ease;
-        }
-
-            table tbody tr:hover {
-                background-color: #ebf8ff;
-            }
-
-    p.empty-message {
-        font-size: 1rem;
-        color: #718096;
-        text-align: center;
-        padding: 1.5rem;
-        background: white;
-        border-radius: 12px;
-        max-width: 600px;
-        margin: 0 auto;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .doktor-listesi {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1.5rem;
-        max-width: 800px;
-        margin: 0 auto 2.5rem;
-    }
-
-    .doktor-kart {
-        background: white;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        border-radius: 12px;
-        padding: 1.5rem;
+    .tab-pane label {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin: 0.25rem;
         cursor: pointer;
-        transition: all 0.3s ease;
-        user-select: none;
-        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+        background-color: #f8f9fa;
     }
 
-        .doktor-kart:hover {
-            background-color: #f7fafc;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        .tab-pane label:hover {
+            background-color: #e2e6ea;
         }
-
-        .doktor-kart.selected {
-            background-color: #e6f3ff;
-            border-color: #3182ce;
-        }
-
-        .doktor-kart strong {
-            display: block;
-            font-size: 1.1rem;
-            color: #2b6cb0;
-            margin-bottom: 0.3rem;
-        }
-
-        .doktor-kart small {
-            color: #718096;
-            font-size: 0.85rem;
-        }
-
-    @@media (max-width: 768px) {
-        .container {
-            padding: 1rem;
-        }
-
-        form, table {
-            max-width: 100%;
-        }
-
-        .doktor-listesi {
-            grid-template-columns: 1fr;
-        }
-    }
 </style>
 
-<div class="container">
-    <h2>Psikiyatrist Listesi</h2>
-
+<div class="container mt-4">
+    <h2 class="mb-4">Psikiyatrist Listesi</h2>
     @if (doktorlar != null && doktorlar.Any())
     {
-        <div class="doktor-listesi">
+        <div class="doktor-listesi row mb-4">
             @foreach (var d in doktorlar)
             {
-                <div class="doktor-kart" data-id="@d.IdentityUserId" onclick="doktorSec(this)">
-                    <strong>@d.Ad @d.Soyad</strong>
-                    <small>ID: @d.IdentityUserId</small>
+                <div class="col-md-4">
+                    <div class="doktor-kart p-3 border rounded shadow-sm mb-3" data-id="@d.IdentityUserId" onclick="doktorSec(this)">
+                        <strong>@d.Ad @d.Soyad</strong><br />
+                        <small>ID: @d.IdentityUserId</small>
+                    </div>
                 </div>
             }
         </div>
     }
     else
     {
-        <p class="empty-message">Henüz doktor bilgisi bulunmamaktadır.</p>
+        <p class="text-muted">Henüz doktor bilgisi bulunmamaktadır.</p>
     }
 
-    <h2>Randevu Oluştur</h2>
-
+    <h2 class="mb-4">Randevu Oluştur</h2>
     <form action="/Hasta/Randevular/RandevuOlustur" method="post">
         @Html.AntiForgeryToken()
-
-        <div class="form-group mb-4">
+        <div class="mb-3">
             <label>Psikiyatrist ID</label>
-            <input type="text" name="PsikiyatristId" class="form-control" required />
+            <input type="text" name="PsikiyatristId" id="psikiyatristIdInput" class="form-control" required readonly />
         </div>
-
-        <div class="form-group mb-4">
-            <label>Tarih ve Saat</label>
-            <input type="datetime-local" name="TarihSaat" class="form-control" step="1800" required />
+        <div class="mb-3">
+            <label>Uygun Randevu Saatini Seçin</label>
+            <div id="zamanSlotlari">
+                <p class="text-muted">Lütfen önce bir psikiyatrist seçiniz.</p>
+            </div>
         </div>
-
-        <div class="form-group mb-4">
+        <div class="mb-3">
             <label>Açıklama</label>
             <textarea name="Aciklama" class="form-control"></textarea>
         </div>
-
         <div class="d-flex justify-content-between">
             <button type="submit" class="btn btn-primary">Randevu Oluştur</button>
-            <a href="/Hasta" class="btn btn-back">Geri Dön</a>
+            <a href="/Hasta" class="btn btn-secondary">Geri Dön</a>
         </div>
     </form>
 
     <hr />
 
-    <h2>Mevcut Randevularım</h2>
-
+    <h2 class="mb-4">Mevcut Randevularım</h2>
     @if (ViewBag.Randevular != null && ((List<PsikiyatristKlinikRandevuProgrami.Core.Model.Randevu>)ViewBag.Randevular).Any())
     {
-        <table class="table table-bordered table-striped" id="randevuTable">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Tarih</th>
@@ -287,80 +137,111 @@
     }
     else
     {
-        <p class="empty-message" id="noAppointmentsMessage">Henüz bir randevunuz yok.</p>
+        <p class="text-muted" id="noAppointmentsMessage">Henüz bir randevunuz yok.</p>
     }
 </div>
-
 <script>
     function doktorSec(element) {
         var id = element.getAttribute('data-id');
-        document.querySelector('input[name="PsikiyatristId"]').value = id;
-        document.querySelectorAll('.doktor-kart').forEach(function(card) {
-            card.classList.remove('selected');
+        $("input[name='PsikiyatristId']").val(id);
+        $('.doktor-kart').removeClass('selected');
+        $(element).addClass('selected');
+
+        $.get(`/Hasta/Randevular/GetAvailableSlots?psikiyatristId=${id}`, function (slotsByDay) {
+            const container = $('#zamanSlotlari');
+            container.empty();
+
+            if (!slotsByDay || Object.keys(slotsByDay).length === 0) {
+                container.html('<p class="text-danger">Bu doktor için uygun saat bulunamadı.</p>');
+                return;
+            }
+
+            let tabs = '<ul class="nav nav-tabs" role="tablist">';
+            let content = '<div class="tab-content p-3 border border-top-0 rounded-bottom">';
+            let index = 0;
+
+            for (const date in slotsByDay) {
+                const tabId = `tab${index}`;
+                const activeClass = index === 0 ? 'active' : '';
+                const showClass = index === 0 ? 'show active' : '';
+
+                tabs += `
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link ${activeClass}" id="${tabId}-tab" data-bs-toggle="tab" data-bs-target="#${tabId}" type="button" role="tab">${date}</button>
+                    </li>
+                `;
+
+                content += `<div class="tab-pane fade ${showClass}" id="${tabId}" role="tabpanel">`;
+                content += '<div class="row">';
+                slotsByDay[date].forEach(slot => {
+                    content += `
+                        <div class="col-md-3 mb-2">
+                            <label class="form-check-label w-100">
+                                <input type="radio" class="form-check-input" name="TarihSaat" value="${slot.raw}" required />
+                                ${slot.label}
+                            </label>
+                        </div>`;
+                });
+                content += '</div></div>';
+
+                index++;
+            }
+
+            tabs += '</ul>';
+            content += '</div>';
+            container.append(tabs + content);
+        }).fail(() => {
+            $('#zamanSlotlari').html('<p class="text-danger">Slotlar yüklenemedi.</p>');
         });
-        element.classList.add('selected');
     }
 
-    // Initialize SignalR connection
+    // SignalR bağlantısı
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/appointmentHub")
         .withAutomaticReconnect()
         .build();
 
-    // Handle approval notifications
     connection.on("ReceiveApprovalNotification", function (message) {
         alert(message);
-        const randevuIdMatch = message.match(/RandevuId: (\d+)/);
-        if (randevuIdMatch) {
-            const randevuId = randevuIdMatch[1];
-            $.ajax({
-                url: `/Hasta/Randevular/GetRandevuById?id=${randevuId}`,
-                method: "GET",
-                success: function (data) {
-                    let row = $(`#randevuTableBody tr[data-randevu-id="${data.id}"]`);
-                    if (row.length > 0) {
-                        row.html(`
+        const match = message.match(/RandevuId: (\d+)/);
+        if (match) {
+            const id = match[1];
+            $.get(`/Hasta/Randevular/GetRandevuById?id=${id}`, function (data) {
+                const row = $(`#randevuTableBody tr[data-randevu-id='${data.id}']`);
+                if (row.length > 0) {
+                    row.html(`
+                        <td>${data.tarihSaat}</td>
+                        <td>${data.durum}</td>
+                        <td>${data.aciklama}</td>
+                    `);
+                } else {
+                    const newRow = `
+                        <tr data-randevu-id="${data.id}">
                             <td>${data.tarihSaat}</td>
                             <td>${data.durum}</td>
                             <td>${data.aciklama}</td>
-                        `);
-                    } else {
-                        const newRow = `
-                            <tr data-randevu-id="${data.id}">
-                                <td>${data.tarihSaat}</td>
-                                <td>${data.durum}</td>
-                                <td>${data.aciklama}</td>
-                            </tr>`;
-                        $("#randevuTableBody").append(newRow);
-                        $("#noAppointmentsMessage").hide();
-                    }
-                },
-                error: function (err) {
-                    console.error("Failed to fetch randevu:", err);
+                        </tr>`;
+                    $('#randevuTableBody').append(newRow);
+                    $('#noAppointmentsMessage').hide();
                 }
             });
         }
     });
 
-    // Handle deletion notifications
     connection.on("ReceiveDeletionNotification", function (message) {
         alert(message);
-        const randevuIdMatch = message.match(/RandevuId: (\d+)/);
-        if (randevuIdMatch) {
-            const randevuId = randevuIdMatch[1];
-            const row = $(`#randevuTableBody tr[data-randevu-id="${randevuId}"]`);
+        const match = message.match(/RandevuId: (\d+)/);
+        if (match) {
+            const id = match[1];
+            const row = $(`#randevuTableBody tr[data-randevu-id='${id}']`);
             if (row.length > 0) {
                 row.remove();
-                // Show empty message if no appointments remain
                 if ($("#randevuTableBody tr").length === 0) {
-                    $("#randevuTable").replaceWith('<p class="empty-message" id="noAppointmentsMessage">Henüz bir randevunuz yok.</p>');
+                    $("#randevuTableBody").closest("table").replaceWith('<p class="text-muted" id="noAppointmentsMessage">Henüz bir randevunuz yok.</p>');
                 }
             }
         }
     });
 
-    // Start SignalR connection
-    connection.start().catch(function (err) {
-        console.error("SignalR connection failed:", err.toString());
-    });
+    connection.start().catch(err => console.error("SignalR bağlantı hatası:", err));
 </script>
