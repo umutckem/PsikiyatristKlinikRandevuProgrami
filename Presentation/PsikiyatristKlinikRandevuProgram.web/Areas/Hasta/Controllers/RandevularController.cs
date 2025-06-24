@@ -145,6 +145,26 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Hasta.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RandevuIptalEt(int id)
+        {
+            var hastaId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var randevu = _context.randevus.FirstOrDefault(r => r.Id == id && r.HastaId == hastaId);
+
+            if (randevu == null)
+                return NotFound();
+
+            _context.randevus.Remove(randevu);
+            await _context.SaveChangesAsync();
+
+            var doktorUserId = randevu.PsikiyatristId.ToString();
+            var message = $"Randevu iptal edildi: {randevu.TarihSaat:dd.MM.yyyy HH:mm} | RandevuId: {randevu.Id}";
+            await _hubContext.Clients.User(doktorUserId).SendAsync("ReceiveDeletionNotification", message);
+
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         public IActionResult GetAvailableSlots(string psikiyatristId)
         {

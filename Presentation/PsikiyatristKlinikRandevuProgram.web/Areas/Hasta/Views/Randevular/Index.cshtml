@@ -121,6 +121,7 @@
                     <th>Tarih</th>
                     <th>Durum</th>
                     <th>Açıklama</th>
+                    <th>İşlem</th>
                 </tr>
             </thead>
             <tbody id="randevuTableBody">
@@ -130,6 +131,13 @@
                         <td>@item.TarihSaat.ToString("g")</td>
                         <td>@item.Durum</td>
                         <td>@item.Aciklama</td>
+                        <td>
+                            <form method="post" action="/Hasta/Randevular/RandevuIptalEt" onsubmit="return confirm('Bu randevuyu iptal etmek istediğinizden emin misiniz?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger">İptal Et</button>
+                            </form>
+                        </td>
                     </tr>
                 }
             </tbody>
