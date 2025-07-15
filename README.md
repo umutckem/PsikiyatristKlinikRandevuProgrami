@@ -1,4 +1,4 @@
-# PsikiyatristKlinikRandevuProgrami
+<img width="1919" height="849" alt="image" src="https://github.com/user-attachments/assets/acdce387-73a2-4cb4-9544-7b1ea5eb1243" /># PsikiyatristKlinikRandevuProgrami
 
 Psikiyatrist Klinik Randevu Programı, bir psikiyatrist kliniğinde hasta, doktor ve yönetici (admin) rollerini kapsayan kullanıcılar için kapsamlı bir dijital yönetim sistemi sunar. Klinik içi işlemleri dijitalleştirerek randevu planlamasını, hasta kayıtlarını, bildirim sistemlerini ve ödeme süreçlerini merkezi bir yapı altında toplamayı amaçlar.
 
@@ -122,7 +122,22 @@ SignalR	✔️ Anlık bildirimler ve randevu olayları gerçek zamanlı sağlanm
 
 <img width="1919" height="833" alt="image" src="https://github.com/user-attachments/assets/4feb7218-0f4e-4a44-ad3a-9bbd0eb17479" />
 
-<img width="1919" height="833" alt="image" src="https://github.com/user-attachments/assets/b95d7e4e-ffa0-45f6-983d-afac362cbdd4" />
+<img width="1919" height="849" alt="image" src="https://github.com/user-attachments/assets/1d132a05-a647-447f-b1c6-e024bcf7776c" />
+
+⚙️ Kurulum ve Çalıştırma
+
+git clone https://github.com/umutckem/PsikiyatristKlinikRandevuProgrami.git
+cd PsikiyatristKlinikRandevuProgrami
+dotnet restore
+dotnet run
+
+📌 Ek Notlar
+
+Geliştirme sürecinde kullanıcı deneyimi ön planda tutulmuştur.
+
+Tüm paneller rollere göre ayrılmış ve yetkilendirme sistemi uygulanmıştır.
+
+Proje, sürdürülebilir, genişletilebilir ve modern yazılım standartlarına uygun olarak tasarlanmıştır.
 
 
 
