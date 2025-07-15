@@ -1,4 +1,4 @@
-<img width="1919" height="849" alt="image" src="https://github.com/user-attachments/assets/acdce387-73a2-4cb4-9544-7b1ea5eb1243" /># PsikiyatristKlinikRandevuProgrami
+PsikiyatristKlinikRandevuProgrami
 
 Psikiyatrist Klinik Randevu Programı, bir psikiyatrist kliniğinde hasta, doktor ve yönetici (admin) rollerini kapsayan kullanıcılar için kapsamlı bir dijital yönetim sistemi sunar. Klinik içi işlemleri dijitalleştirerek randevu planlamasını, hasta kayıtlarını, bildirim sistemlerini ve ödeme süreçlerini merkezi bir yapı altında toplamayı amaçlar.
 
