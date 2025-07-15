@@ -116,10 +116,6 @@ SignalR	✔️ Anlık bildirimler ve randevu olayları gerçek zamanlı sağlanm
 
 <img width="1919" height="812" alt="image" src="https://github.com/user-attachments/assets/e4ca1c7b-ad73-4b03-b71b-04c2df5cc81e" />
 
-<img width="1919" height="812" alt="image" src="https://github.com/user-attachments/assets/a3bd5a54-81a8-40be-adf2-aaa126045aac" />
-
-<img width="1919" height="812" alt="image" src="https://github.com/user-attachments/assets/c7b67f23-1891-4b68-84c5-4b6f97c8e861" />
-
 <img width="1919" height="818" alt="Ekran görüntüsü 2025-07-15 160555" src="https://github.com/user-attachments/assets/a200edd1-b548-4777-bb98-6eed09952972" />
 
 <img width="1919" height="842" alt="image" src="https://github.com/user-attachments/assets/468145ef-a020-4825-b2da-32b02e551ba1" />
