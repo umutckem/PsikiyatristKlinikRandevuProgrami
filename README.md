@@ -120,6 +120,12 @@ SignalR	✔️ Anlık bildirimler ve randevu olayları gerçek zamanlı sağlanm
 
 <img width="1919" height="842" alt="image" src="https://github.com/user-attachments/assets/468145ef-a020-4825-b2da-32b02e551ba1" />
 
+<img width="1919" height="833" alt="image" src="https://github.com/user-attachments/assets/4feb7218-0f4e-4a44-ad3a-9bbd0eb17479" />
+
+<img width="1919" height="833" alt="image" src="https://github.com/user-attachments/assets/b95d7e4e-ffa0-45f6-983d-afac362cbdd4" />
+
+
+
 
 
 
