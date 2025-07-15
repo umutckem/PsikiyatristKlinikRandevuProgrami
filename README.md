@@ -1,4 +1,4 @@
-PsikiyatristKlinikRandevuProgrami
+## PsikiyatristKlinikRandevuProgrami
 
 Psikiyatrist Klinik Randevu Programı, bir psikiyatrist kliniğinde hasta, doktor ve yönetici (admin) rollerini kapsayan kullanıcılar için kapsamlı bir dijital yönetim sistemi sunar. Klinik içi işlemleri dijitalleştirerek randevu planlamasını, hasta kayıtlarını, bildirim sistemlerini ve ödeme süreçlerini merkezi bir yapı altında toplamayı amaçlar.
 
