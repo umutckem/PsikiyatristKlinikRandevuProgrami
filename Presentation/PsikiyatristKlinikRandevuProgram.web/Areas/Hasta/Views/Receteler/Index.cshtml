@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Reçetelerim";
-    var doktorAdlari = ViewBag.DoktorAdlari as Dictionary<string, string>; // ViewBag'den doktor adlarını al
+    var doktorAdlari = ViewBag.DoktorAdlari as Dictionary<Guid, string>;
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -118,7 +118,6 @@
 
     }
 </style>
-
 <div class="container">
     <h2>@ViewData["Title"]</h2>
 
@@ -128,7 +127,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Psikiyatrist</th> <!-- Başlığı güncellendi -->
+                    <th>Psikiyatrist</th>
                     <th>İlaç Bilgileri</th>
                     <th>Tedavi Planı</th>
                     <th>Yazılma Tarihi</th>
@@ -142,7 +141,7 @@
                         <td>
                             @{
                                 string doktorAd;
-                                if (doktorAdlari != null && doktorAdlari.TryGetValue(recete.PsikiyatristId.ToString(), out doktorAd))
+                                if (doktorAdlari != null && doktorAdlari.TryGetValue(recete.PsikiyatristId, out doktorAd))
                                 {
                                     @doktorAd
                                 }
@@ -151,7 +150,6 @@
                                     <span>Bilinmeyen Doktor</span>
                                 }
                             }
-
                         </td>
                         <td>@recete.IlacBilgileri</td>
                         <td>@recete.TedaviPlani</td>

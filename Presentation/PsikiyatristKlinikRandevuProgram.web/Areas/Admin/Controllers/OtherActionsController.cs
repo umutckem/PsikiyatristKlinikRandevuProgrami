@@ -24,7 +24,6 @@ namespace PsikiyatristKlinikRandevuProgram.web.Areas.Admin.Controllers
         public async Task<IActionResult> Sikayetler()
         {
             var sikayetler = await _context.geriBildirims
-                .Where(g => g.Tur == "Şikayet")
                 .OrderByDescending(g => g.OlusturmaTarihi)
                 .ToListAsync();
 
